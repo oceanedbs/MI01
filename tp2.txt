@@ -1,0 +1,233 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    14:24:41 10/09/2017 
+-- Design Name: 
+-- Module Name:    compteur - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity compteur is
+PORT(PB_0,PB_1:IN BIT;
+		LED_10: OUT INTEGER RANGE 0 to 3);
+end compteur;
+
+architecture Behavioral of compteur is
+
+begin
+PROCESS(PB_0)
+VARIABLE resultat:INTEGER range 0 to 3;
+BEGIN
+	IF(PB_0'EVENT and PB_0='1') THEN
+		IF PB_1 = '0' THEN 
+			resultat := resultat + 1;
+			IF resultat > 3 THEN
+				resultat := 0;
+			END IF;
+		ELSE
+			resultat := 0;
+		END IF;
+	END IF;
+
+LED_10 <= resultat;
+
+END PROCESS;
+
+end Behavioral;
+
+
+
+
+
+entity compteur is
+PORT(PB_0,PB_1:IN BIT;
+		LED_10: OUT INTEGER RANGE 0 to 3);
+end compteur;
+
+architecture Behavioral of compteur is
+
+begin
+PROCESS(PB_0)
+VARIABLE resultat:INTEGER range 0 to 3;
+VARIABLE etat:INTEGER range 0 to 1;
+
+BEGIN
+	IF(PB_0'EVENT and PB_0= '1') THEN
+		IF PB_1 = '0' THEN etat := 0;
+		CASE etat IS
+			WHEN 0 => resultat := 0;
+			etat := etat +1;
+			WHEN 1 => IF (resultat < 3) THEN resultat := resultat +1;
+							ELSE etat := 0;
+							END IF;
+		
+		END CASE;
+		END IF;
+	END IF;
+
+LED_10 <= resultat;
+
+END PROCESS;
+
+end Behavioral;
+
+
+
+
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    14:24:41 10/09/2017 
+-- Design Name: 
+-- Module Name:    compteur - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity compteur is
+PORT(PB_0,PB_1:IN BIT;
+		LED_10: OUT INTEGER RANGE 0 to 3);
+end compteur;
+
+architecture Behavioral of compteur is
+
+begin
+PROCESS(PB_0)
+VARIABLE resultat:INTEGER range 0 to 3;
+BEGIN
+	IF(PB_0'EVENT and PB_0='1') THEN
+		IF PB_1 = '0' THEN 
+			resultat := resultat + 1;
+		ELSE
+			resultat := 0;
+		END IF;
+	END IF;
+
+LED_10 <= resultat;
+
+END PROCESS;
+
+end Behavioral;
+
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    15:41:13 10/09/2017 
+-- Design Name: 
+-- Module Name:    decodeur - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity decodeur is
+	PORT(PB_0, SW_0 : IN BIT;
+		LED_0 : OUT BIT;
+		LED_7654 : OUT INTEGER RANGE 0 to 15);
+end decodeur;
+
+architecture Behavioral of decodeur is
+begin
+process(PB_0)
+variable state : INTEGER RANGE 0 to 15;
+begin
+ if(PB_0'Event and PB_0 = '1') then
+  case state is
+   when 0 => if (SW_0 = '1') then 
+      state := 1; 
+      LED_0 <= '0'; 
+		else LED_0 <= '0';
+       end if;
+   when 1 => if (SW_0 = '1') then 
+      state := 2; 
+       else LED_0 <= '0'; 
+      state :=0; 
+       end if;
+   when 2 => if (SW_0 = '0') then 
+      state := 3; 
+		else 
+        LED_0 <= '0';
+         state :=0; 
+       end if;
+   when 3 => if (SW_0 = '1') then 
+      state := 4; 
+       else
+         LED_0 <= '0'; 
+         state :=0; 
+       end if;
+   when 4 => if (SW_0 = '0') then 
+      state := 0; 
+		LED_0 <= '1';
+		else 
+      state :=0;
+     end if;
+   when others => state := 0;
+  end case;
+ LED_7654 <= state;
+ end if;
+end process;
+end Behavioral;
+
+
