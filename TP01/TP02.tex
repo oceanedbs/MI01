@@ -98,7 +98,7 @@ end Behavioral;
 
 \end{lstlisting}
 
-Et voici maintenant le code du reset asynchrone. On a simplement passe le signal du reset dans la liste de sensibilité du process et on peut activer le reset indépendemment du signal PB\_0.
+Et voici maintenant le code du reset asynchrone. On a simplement passé le signal du reset dans la liste de sensibilité du process et on peut activer le reset indépendemment du signal PB\_0, puisque l'activation du reset ne se trouve plus à l'intérieur de la condition "IF(PB\_0'EVENT and PB\_0='1') THEN". Il peut donc se déclancher indépendamment de l'activation du compteur. 
 
 
 \begin{lstlisting}
@@ -128,23 +128,50 @@ END PROCESS;
 END Behavioral;
 
 \end{lstlisting}
+
+Une fois que les deux programmes sont écrits on procède à la synthèse des programmes. 
  
  \subsection{ b) Synthèse du code VHDL }
  
+ Avertissement sur PB\_0 ???????
  
+ Voic la synthèse avec le code du reset synchrone :
+ \begin{figure}[h]
+\includegraphics[width=8cm]{TP02-3.PNG}
+\caption{Schéma RTL du compteur avec reset synchrone}
+\end{figure}
+
+On remarque bien les deux entrée PB\_0 et PB\_1, le compteur au milieu du composant et la LED\_10 qui correspond à la sortie. 
+
+Voici maintenant la vue technologique du code avec le reset synchrone : 
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{TP02-4.PNG}
+\caption{Schéma technologique du compteur avec reset synchrone}
+\end{figure}
+
+COMMENTAIRE ????????? 
  
 \subsection{ c) Simulation du circuit}
 
+Ensuite nous effectuons la simulation du circuit grâce au logiciel. 
+En faisant varier les 2 signaux d'entrée voici le résultat que nous obtenons.
+
 \begin{figure}[h]
 \includegraphics[width=15cm]{TP02-1.PNG}
-\caption{Simulation du compteur}
+\caption{Simulation du compteur avec reset synchrone}
 \end{figure}
 
-Lors de la simulation avec l'horloge synchrone on remarque que lorsque le reset est activé, on doit attendre que le signal d'entrée soit passé à '1' pour que le compteur repasse à 0, tant que le signal d'entre PB\_0 n'est pas passé à 1, le reset ne prend pas effet.
+Lors de la simulation avec l'horloge synchrone on remarque que lorsque le reset est activé, on doit attendre que le signal d'entrée PB\_0 soit passé à '1' pour que le compteur repasse à 0, tant que le signal d'entre PB\_0 n'est pas passé à 1, le reset ne prend pas effet.
 
-Ce n'est pas le cas avec un reset asynchrone
+Ce n'est pas le cas avec un reset asynchrone, dont voici la simulation :
 
+\begin{figure}[h]
+\includegraphics[width=15cm]{TP02-5.PNG}
+\caption{Simulation du compteur avec reset asynchrone}
+\end{figure}
 
+Ici on peut voir que le reset prend effet dès sont activation, on n'a pas besoin que PB\_0 soit activé. 
 
   
    \subsection{ d) programmation du FPGA}
