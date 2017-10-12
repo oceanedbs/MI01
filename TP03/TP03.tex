@@ -62,21 +62,21 @@ architecture Behavioral of blinker is
 		clock_divider : process(Clk100Mhz, reset)
 		variable c : integer range 0 to clock_divisor - 1 := 0;
 		begin
-		if reset = '1' then
+		if reset = '1' then -- si on declanche le reset on recommence le cycle de l'horloge a 0
 			c := 0;
 			clk_out <= '0';
-		elsif Clk100MHz'event and Clk100MHz = '1' then
-			if c < (clock_divisor - 1) / 2 then
+		elsif Clk100MHz'event and Clk100MHz = '1' then --si le signal Clk100MHz est sur un front montant
+			if c < (clock_divisor - 1) / 2 then --entre 0 et 0,5secondes on incremente c et on laisse la sortie a 0
 				c := c + 1;
 				clk_out <= '0';
-			elsif c = (clock_divisor - 1) then
+			elsif c = (clock_divisor - 1) then -- lorsqu'on arrive a une seconde, on recommence le cycle a 0
 				c := 0;
 				clk_out <= '0';
-		else
-			c := c + 1;
+			else -- sur la deuxieme partie du cycle (de 0,5 a 1seconde), on continue d'incrementer c et on passe la sortie a 1.
+					c := c + 1;
 			clk_out <= '1';
+			end if;
 		end if;
-	end if;
 	end process;
 -- Sortie sur la LED
 LED_0 <= clk_out;
@@ -85,13 +85,14 @@ end Behavioral;
 
 Dans ce code, on définit d'abord une entité "blinker", consituté de 2 ports d'entrée : Clk100MHz, PB\_0 et une sortie LED\_0.
 
-Puis dans l'architecture, on définit un alias pour PB\_0 qui sera désomais appelé reset. On définit un nouveau signal de type bit, appelé clk\_out qui est initialisé à 0.  Et une constante de type entier nommé clock\_divisor initialisé à 100000000. 
+Puis dans l'architecture, on définit un alias pour PB\_0 qui sera désomais appelé reset. On définit un nouveau signal de type bit, appelé clk\_out qui est initialisé à 0 qui sera le signal de sortie.  Et une constante de type entier nommé clock\_divisor initialisé à 100000000. 
 
 Puis on déclare un process donc la liste de signaux de sensibilité est composée des signaux Clk100Mhz et reset.C'est donc un reset asynchrone.  
 
-Dans le process si le reset est activé, on met la variable c à 0 et le signal clock\_out à 0. Si le signal Clk100MHz est sur un front montant et que la variable c est inferieur à (100000000-1)/2 =49999999,5 alors on incrémente la variable c et le signal clock\_out est mis à 0. Si c = 99999999 on met c à 0 et clv\_out à 0. Dans tous les autres cas on incrémente c et on met clk\_out.
-
+Dans le process si le reset est activé, on met la variable c à 0 et le signal clock\_out à 0. Si le signal Clk100MHz est sur un front montant et que la variable c est inferieur à (100000000-1)/2 =49999999,5 alors on incrémente la variable c et le signal clock\_out est mis à 0. Si c = 99999999 on met c à 0 et clv\_out à 0. Entre 49999999,5 et 99999999 on met la sortie à 1.
 A la fin du process on égalise clk\_out sur LED\_0.
+
+La LED\_0 est donc activée (à 1) à chaque cycle (de 1 entre 0,5 secondes et 1 seconde le reste du temps elle est à 0. 
 
 
 \section{Feu de circulation}
