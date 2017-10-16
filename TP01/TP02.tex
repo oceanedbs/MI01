@@ -64,7 +64,7 @@ Chaque fois que l'on appuie sur le bouton, le compteur est incrémenté de 1. Le
 
 On pensera à se synchroniser sur le front montant de l'horloge.
 
-\subsection{ a) Ecriture du programme en VHDL}
+\subsection{ Ecriture du programme en VHDL}
 
 Voici le programme de l'exercice 1. On a supprimé les premières instructions dans un soucis de clareté du programme.
 
@@ -130,8 +130,8 @@ END Behavioral;
 \end{lstlisting}
 
 Une fois que les deux programmes sont écrits on procède à la synthèse des programmes. 
- 
- \subsection{ b) Synthèse du code VHDL }
+
+ \subsection{ Synthèse du code VHDL }
  
  Avertissement sur PB\_0 ???????
  
@@ -145,7 +145,7 @@ Une fois que les deux programmes sont écrits on procède à la synthèse des pr
 \end{figure}
 
 
-On remarque bien les deux entrée PB\_0 et PB\_1, le compteur au milieu du composant et la LED\_10 qui correspond à la sortie. 
+On remarque bien les deux entrée PB\_0 et PB\_1, le compteur au milieu du composant et la LED\_10 qui correspond à la sortie. Le syntéhtiseur à donc bien reconnu le code comme étant un compteur.
 
 Voici maintenant la vue technologique du code avec le reset synchrone : 
 
@@ -160,9 +160,11 @@ Au niveau de la sortie on a bien les 2 LED qui sont présentes. Le résultat de 
 Le reset (l'entrée PB\_1) est est reliée à ces 2 même blocs pour les remettre à 0 si besoin. 
 C'est le bloc lut2 qui lorsque le bloc fdr resultat\_0 ne peut plus calculer sur 1 bit le résultat, passe le résultat au bloc fdr resultat\_1. 
 
+Ce schéma est un schéma structurel.
+
 \newpage
  
-\subsection{ c) Simulation du circuit}
+\subsection{ Simulation du circuit}
 
 Ensuite nous effectuons la simulation du circuit grâce au logiciel. 
 En faisant varier les 2 signaux d'entrée voici le résultat que nous obtenons.
@@ -184,7 +186,7 @@ Ce n'est pas le cas avec un reset asynchrone, dont voici la simulation :
 Ici on peut voir que le reset prend effet dès sont activation, on n'a pas besoin que PB\_0 soit activé. 
 
   
-   \subsection{ d) programmation du FPGA et vérification du fonctionnement}
+   \subsection{programmation du FPGA et vérification du fonctionnement}
    
    Lorsqu'on programme le FPGA et qu'on télécharge le code sur la carte, on observe bien les 2 comportements attendus avec les reset synchrone et asynchrone. 
    De plus les 2 leds ne peuvent afficher que les résultats allant de 0 à 3. Une fois que le compteur dépasse la valeur 3, le résultat est affiché modulo 4. 
@@ -270,7 +272,7 @@ Dans ce code, nous nous sommes basés sur un diagramme à 5 états (de 0 à 4). 
 Nous égalisons la variable d'état avec le groupe de LED 7654, cela nous permet de savoir à quel état de la machine à état nous sommes, dans l'entrée du code. 
 
 
-\subsection{ b) Synthèse du code VHDL }
+\subsection{ Synthèse du code VHDL }
 
 
 Nous avons ensuite réalisé la simultaion RTL et Technologique du code, voilà ce que nous avons obtenu.
@@ -300,12 +302,15 @@ Il y a aussi une ligne qui rejoins toutes les LED du circuit. Ainsi lorsque l'é
 Et comme déjà dit, une ligne de sortie par valeur de la variable d'état.
 
 
-  ????? Nombre de bits utilisés par le detecteur et sous quelle forme
+La variable état est donc représenté comme un registre. Ce registre est représenté par 4 bascules car "etat" est représenté sur 4 bits. 
+
+  
+  
   ??? Equation de génération de la sortie
   
   
  
-  \subsection{ c) Simulation du circuit}
+  \subsection{ Simulation du circuit}
  
 Lors de la simulation, voici ce que nous avons obtenu, on remarque donc bien que dès qu'une fausse entrée est entrée, la variable d'état retombe à 0. 
 
@@ -315,7 +320,7 @@ Lors de la simulation, voici ce que nous avons obtenu, on remarque donc bien que
 \end{figure}
   
   
-   \subsection{ d) programmation du FPGA}
+   \subsection{ programmation du FPGA}
 
 Nous avons donc programmé le FPGA et tout à fonctionné correctement. 
 
@@ -390,12 +395,12 @@ end Behavioral;
 On a donc, comme précédement mis l'instruction LED\_0 <='0', pour être sûrs que la LED est éteinte. De plus dans le "ELSE", nous avons écrit l'instruction permettant de maintenir l'état à sa valeur actuelle. 
 
 
-???? REVOIR LE CODE ET ENLEVER LES LIGNES INUTILES ? (TOUTE LA PARTIE DU ELSE)
+???? REVOIR LE CODE ET ENLEVER LES LIGNES INUTILES ? (TOUTE LA PARTIE DU ELSE ??)
 
 CODE NE FONCTIONNE PAS EN SIMULATION ....
 
 
-\subsection{ b) Synthèse du code VHDL }
+\subsection{ Synthèse du code VHDL }
 
 ???? ON A PAS FAIT LA SYNTHESE DE CE CODE CAR BUG
 
@@ -403,7 +408,7 @@ LE NOMBRE DE BITS D'ETATS EST-IL LE MEME
 EQUATION DE TRANSITION ET DE SORTIE PLUS SIMPLE ? 
 
  
-  \subsection{ c) Simulation du circuit}
+  \subsection{ Simulation du circuit}
   
 DIFFERENCE PAR RAPPORT A L'EXERCICE 2 ? BITS D'ETATS COHERENTS AVEC VHDL ? 
 
