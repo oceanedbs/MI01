@@ -9,6 +9,7 @@
  \usepackage{graphicx}
  \usepackage{amsmath}
 \pagestyle{fancy}
+ \usepackage{comment} 
 
  \lhead{Geoffrey PERRIN \\ Océane DUBOIS}
  \rhead{MI01 - TP02 : VHDL séquentiel}
@@ -214,6 +215,8 @@ Dans cette première modélisation on supposera qu'une fausse entrée implique d
 
 On décide de modéliser le code par une machine à 5 états avec chaque état correspondant à une bonne entrée du code.
 
+
+\begin{comment}
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
                     semithick]
 
@@ -224,6 +227,8 @@ On décide de modéliser le code par une machine à 5 états avec chaque état c
 	
 
 \end{tikzpicture}
+
+\end{comment}
 
 \subsection{Ecriture du code VHDL}
 
@@ -465,7 +470,6 @@ On a : \medbreak
 \caption{Schéma Technology qui génère la sortie de la LED\_7654(0)}
 \end{figure}
  
-
 
 \end{document}
 
