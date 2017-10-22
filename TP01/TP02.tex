@@ -55,7 +55,7 @@
 
 Dans cet exercice on cherche à implémenter le  modèle VHDL d'un compteur synchrone à 2 bits, 
 On utilisera : \begin{itemize}
-	 \item  une entrée  pour le reset : PB\_1. Cette entrée est un bouton poussoir qui remet le compteur à 0 si on le met à '1'.
+	 \item  une entrée  pour le reset : PB\_1. Cette entrée est un bouton poussoir qui remet le compteur à '0' si on le met à '1'.
 	\item un signal d'entrée (un bouton) PB\_0 , un autre bouton poussoir,qui incrémente le compteur lorsqu'on le met à 1.
 	 \item le signal LED\_10 comme signal de sortie, qui est un groupe de 2 led qui permet d'afficher le resultat du compteur.
 	 
@@ -63,7 +63,7 @@ On utilisera : \begin{itemize}
 
 \medskip
 
-Chaque fois que l'on appuie sur le bouton, le compteur est incrémenté de 1. Le résultat est affiché grâce aux LED. Si la valeur du compteur dépasse 3, le compteur est remis à 0 car la carte affiche le résultat du compteur modulo 4(car on peut afficher 4 chiffres sur les 2 LED). Sinon le bouton reset (PB\_1), permet de remettre le compteur à 0.
+Chaque fois que l'on appuie sur le bouton, le compteur est incrémenté de 1. Le résultat est affiché grâce aux LED. Si la valeur du compteur dépasse 3, le compteur est remis à 0 car la carte affiche le résultat du compteur modulo 4(car on ne peut afficher que 4 chiffres sur les 2 LED). Sinon le bouton reset (PB\_1), permet de remettre le compteur à 0.
 
 \medskip
 
@@ -154,7 +154,7 @@ On remarque bien les deux entrée PB\_0 et PB\_1, le compteur au milieu du compo
 
 Voici maintenant la vue technologique du code avec le reset synchrone : 
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[width=15cm]{TP02-4.PNG}
 \caption{Schéma technologique du compteur avec reset synchrone}
@@ -162,7 +162,7 @@ Voici maintenant la vue technologique du code avec le reset synchrone :
 \end{figure}
 
 Au niveau de la sortie on a bien les 2 LED qui sont présentes. Le résultat de la LED 0 est calculé par le bloc fdr resultat\_0, le résultat de la led 1 est calculé par le bloc fdr resultat\_1. 
-Le reset (l'entrée PB\_1) est est reliée à ces 2 même blocs pour les remettre à 0 si besoin. 
+Le reset (l'entrée PB\_1) est reliée à ces 2 même blocs pour les remettre à 0 si besoin. 
 C'est le bloc lut2 qui lorsque le bloc fdr resultat\_0 ne peut plus calculer sur 1 bit le résultat, passe le résultat au bloc fdr resultat\_1. 
 
 Tous les composants apparaissant sont des composants qui existent réellement sur le FPGA. 
@@ -287,7 +287,7 @@ end Behavioral;
 
 \end{lstlisting}
 
-Dans ce code, nous nous sommes basés sur un diagramme à 5 états (de 0 à 4). A chaque entrée qui correpond au code à etecer, on incrémente la variable state, si il y a une fausse entrée, on repasse la variable state à 0 et on doit recommencer le code depuis le début. Lorsqu'on arrive à l'état 4 et que le dernier chiffre du code est correctement rentré, on passe la led à 1 pour quelle s'allume. On passe également l'état à 5 pour que lors du cycle suivant, on passe dans la condition "WHEN OTHERS" qui remet l'état à 0. De plus à chaque état nous avons ajouté l'instruction qui permet d'éteindre la LED si le chiffre rentré n'est pas le bon. Nous sommes ainsi sûrs que la LED ne s'allume que si le code correct est rentré et qu'elle s'éteint dans toutes les autres situations. 
+Dans ce code, nous nous sommes basés sur un diagramme à 5 états (de 0 à 4). A chaque entrée qui correpond au code à executer, on incrémente la variable state, si il y a une fausse entrée, on repasse la variable state à 0 et on doit recommencer le code depuis le début. Lorsqu'on arrive à l'état 4 et que le dernier chiffre du code est correctement rentré, on passe la led à 1 pour quelle s'allume. On passe également l'état à 5 pour que lors du cycle suivant, on passe dans la condition "WHEN OTHERS" qui remet l'état à 0. De plus à chaque état nous avons ajouté l'instruction qui permet d'éteindre la LED si le chiffre rentré n'est pas le bon. Nous sommes ainsi sûrs que la LED ne s'allume que si le code correct est rentré et qu'elle s'éteint dans toutes les autres situations. 
 
 Nous égalisons la variable d'état avec le groupe de LED 7654, cela nous permet de savoir à quel état de la machine à état nous sommes, dans l'entrée du code. 
 
@@ -301,7 +301,7 @@ Nous avons ensuite réalisé la simultaion RTL et Technology du code, voilà ce 
 
 \begin{figure}[!h]
 \includegraphics[width=10cm]{TP02-9.PNG}
-\caption{Schéma Technology du détecteur, ue fausse entrée implique de recommencer du début}
+\caption{Schéma Technology du détecteur, une fausse entrée implique de recommencer du début}
 \end{figure}
 
 
@@ -310,7 +310,7 @@ Nous pouvons donc voir les 3 LED utilisées en sortie pour afficher l'état en p
 Pour signal d'horloge, la valeur entrée passe dans un opérateur ET avec le résultat de l'alarme. Puis le résultat des 2 est dirigé vers le bloc LED\_mux\_0.
 
 
-A la sortie du bloc state il y a aussi une ligne pour chaque état, de l'état 0 à l'état 4. Ces 4 lignes sont dirigée vers le bloc LED\_mux\_0
+A la sortie du bloc state il y a aussi une ligne pour chaque état, de l'état 0 à l'état 4. Ces 5 lignes sont dirigée vers le bloc LED\_mux\_0
 Ces 5 lignes passent aussi dans un OR, donc la sortie est aussi dirigée vers le bloc LED\_mux\_0.
 
 Le bloc LED\_mux\_0 qui gère donc l'alarme prend donc en entrée les valeurs de states, le signal d'horloge ET le résultat de l'alarme, et la valeur de l'horloge.
@@ -360,7 +360,7 @@ D'après le schéma RTL on peut définir les équations de sorties.
  LED\_7654(3) = (LED\_7654(0) AND S5) OR (SW\_0 AND S0) \medbreak
  
  
- Ces équations semblent être cohérentes avec le VHDL. Par exemple pour LED\_0, on effectue le ET booléen sur S4 et SW\_0 ce qui correspond au VHDL.  Cependant, les équations de sortie du groupe de LED 6543 font aussi intervenir les valeurs des autres LED, qu'on ne connait pas forcément. Ces équations vérifient également qu'on ne soit pas dans un état incohérent.
+ Ces équations semblent être cohérentes avec le VHDL. Par exemple pour LED\_0, on effectue le ET booléen sur S4 et SW\_0 ce qui correspond au VHDL.  Cependant, les équations de sortie du groupe de LED 7654 font aussi intervenir les valeurs des autres LED, qu'on ne connait pas forcément. Ces équations vérifient également qu'on ne soit pas dans un état incohérent.
   
  
   \subsection{ Simulation du circuit}
@@ -445,7 +445,7 @@ end Behavioral;
 
 \end{lstlisting}
 
-On a donc, comme précédement mis l'instruction LED\_0 <='0', pour être sûrs que la LED est éteinte. De plus dans le "ELSE", nous avons écrit l'instruction permettant de maintenir l'état à sa valeur actuelle. 
+On a donc, comme précédement mis l'instruction $LED\_0  \leftarrow'0'$, pour être sûrs que la LED est éteinte. De plus dans le "ELSE", nous avons écrit l'instruction permettant de maintenir l'état à sa valeur actuelle. 
 
 
 
@@ -453,7 +453,7 @@ On a donc, comme précédement mis l'instruction LED\_0 <='0', pour être sûrs 
 
 
 \begin{figure}[!h]
-\includegraphics[width=15cm]{TP02-13.png}
+\includegraphics[width=10cm]{TP02-13.png}
 \caption{Schéma RTL du décodeur en négligeant une fausse entrée}
 \end{figure}
 
@@ -461,12 +461,12 @@ On a toujours le même nombre de bit d'états, soit 6. Cependant les équations 
 
 Si on suppose $LED\_0_t$ l'état de LED\_0 à l'instant t. 
 On a : \medbreak
- $LED\_0_t =  (((LED\_0_{t-1} ET SW\_0) OR (NOT SW\_0) ET (OUT4)) \\ OU (LED\_0_{t-1} ET NOT SW\_0) ET OUT\_3) \\ OU (LED\_0_{t-1} ET SW\_0 ET OUT\_2) \\ OU ((( LES\_0_{t-1} ET SW\_0) OR (NOT SW\_0)) et OUT1) \\ OU (((LED\_0_{t-1} ET SW\_0) OR (NOT SW\_0)) ET OUT0)$
+ $LED\_0_t =  (((LED\_0_{t-1} ET (SW\_0)) OR (NOT SW\_0) ET (OUT4)) \\ OU (LED\_0_{t-1} ET (NOT SW\_0)) ET (OUT\_3)) \\ OU (LED\_0_{t-1} ET (SW\_0) ET (OUT\_2)) \\ OU ((( LES\_0_{t-1} ET (SW\_0)) OR (NOT SW\_0)) ET (OUT1)) \\ OU (((LED\_0_{t-1} ET (SW\_0)) OR (NOT SW\_0)) ET (OUT0))$
 
  Le schéma Technology est également très différent et beaucoup plus complexe. Voici par exemple le circuit qui gènere la sortie LED\_7654(0)
  
  \begin{figure}[!h]
-\includegraphics[width=15cm]{TP02-15.png}
+\includegraphics[width=10cm]{TP02-15.png}
 \caption{Schéma Technology qui génère la sortie de la LED\_7654(0)}
 \end{figure}
  
