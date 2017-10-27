@@ -121,9 +121,9 @@ On réalise un modélisation à partir d'un machine à états
 \caption{Machine à état des feux}
 \end{figure}
 
-La machine reste dans l'état 1 pendant 8 secondes, puis dans l'état 2 pendant 2 secondes puis dans l'état 3 pendant 8 secondes et enfin dans l'état 4 pendant 2 secondes. 
+La machine reste dans l'état 1 pendant 8 secondes, puis dans l'état 2 pendant 2 secondes puis dans l'état 3 pendant 8 secondes et enfin dans l'état 4 pendant 2 secondes.
 
-Ainsi de 0 à 8 secondes, le feu A est vert et le feu B est au rouge, de 8 à 10 secondes, le feu A est orange et le feu B est rouge, de 10 à 18 secondes, le feu A est rouge et le feu B est vert et de 18 à 30 secondes, le feu A est rouge et le feu B est orange. A la fin, on recommence le cycle depuis le début. 
+Ainsi de 0 à 8 secondes, le feu A est vert et le feu B est au rouge, de 8 à 10 secondes, le feu A est orange et le feu B est rouge, de 10 à 18 secondes, le feu A est rouge et le feu B est vert et de 18 à 30 secondes, le feu A est rouge et le feu B est orange. A la fin, on recommence le cycle depuis le début.
 
 
 On utilisera dans le code VHDL des entiers pour différencier les couleurs de feu, soit la valeur 1 pour signaler un feu rouge, 2 pour le feu orange et 4 pour le feu vert.
@@ -133,7 +133,104 @@ On utilisera dans le code VHDL des entiers pour différencier les couleurs de fe
 
 
 
-// recopier le bon code VHDL
+\subsection{Code VHDL}
+\begin{lstlisting}
+ENTITY feu IS
+        PORT(Clk100MHz, PB_0 : IN BIT;
+                LED_3210, LED_7654 : OUT INTEGER RANGE 0 TO 15);
+END feu;
+
+ARCHITECTURE Behavioural OF feu IS
+alias reset is PB_0;
+signal clk_out : bit := '0';
+constant clock_divisor : integer := 100000000;
+BEGIN
+  clock_divider : PROCESS(Clk100Mhz, reset)
+  variable c : integer range 0 to clock_divisor - 1 := 0;
+    begin
+      if reset = '1' then
+        c := 0;
+        clk_out <= '0';
+      elsif Clk100MHz'event and Clk100MHz = '1' then
+
+        if c < (clock_divisor - 1) / 2 then
+                c := c + 1;
+                clk_out <= '0';
+        elsif c = (clock_divisor - 1) then
+                c := 0;
+                clk_out <= '0';
+        else
+        c := c + 1;
+                clk_out <= '1';
+        end if;
+
+      end if;
+    end process;
+
+    process(clk_out)
+      variable c : integer range 0 to 20; --temps total d'un cycle
+      variable etat : integer range 0 to 3;
+		  variable feuA, feuB : integer range 0 to 4;
+
+        begin
+
+          if (clk_out'Event and clk_out = '1' ) then
+            if c < 8 then
+              c := c + 1;
+              etat := 0;
+            elsif c < 10 then
+              c := c + 1;
+              etat := 1;
+            elsif c < 18 then
+              c := c + 1;
+              etat := 2;
+            elsif c < 20 then
+              c := c + 1;
+              etat := 3;
+            end if;
+            if c = 20 then
+               c := 0;
+            end if;
+          end if;
+
+            case etat is
+                when 0 => feuA := 1; feuB := 4; --le feu de l'axe A est vert et le feu de l'axe B est rouge
+                when 1 => feuA := 2; feuB := 4; --le feu de l'axe A est orange, le feu de l'axe B est rouge
+                when 2 => feuA := 4; feuB := 1; --le feu de l'axe A est rouge, le feu de l'axe B est vert
+                when 3 => feuA := 4; feuB := 2; --le feu de l'axe A est rouge et le feu de l'axe B est orange
+                when others => feuA := 1; feuB := 4;
+            end case;
+
+        LED_3210 <= feuA;
+        LED_7654 <= feuB;
+      end process;
+  END Behavioural;
+
+
+
+\end{lstlisting}
+
+Sachant que le signal d'entrée du deuxième process est clk\_out et qu'il change d'état toutes les seconde, nous avons décidé de créer un compteur de temps, modélisé par la variable c, qui permet d'incrémenter la variable d'état toutes les 8 puis 2 secondes, plutôt que de faire une machine à 20 états différents.
+
+Pour le reset nous avons défini le comportement du reset pour chacun des 4 états de la machine, afin d'essayer d'avoir le reset le plus sécurisé possible pour les automobiliste.
+
+Ainsi l'état de reset est défini ainsi : feu A au vert et feu B au rouge.
+
+Ainsi dans l'état 0 (feu A au vert et feu B au rouge), si on appuie sur le reset, on remet le compteur à 0 et on reste dans cet état.
+
+Dans l'état 1 (le feu A est orange et le feu B est au rouge), si on appuie sur le reset on peut directement repasser dans l'état 0 aussi, car passer du orange vers le vert n'est, pour nous, pas un dangers pour les automobilistes.
+
+Dans l'état 2 (le feu A est rouge et le feu B est vert), si on appuie sur reset, il faut passer le feu B au orange pendant 2 secondes puis ensuite passer au rouge et passer le feu A au vert. Cette séquence d'instruction correspond à celle qui se passe lorsqu'on est dans l'état 3 et qu'on repasse à l'état 0.
+
+Dans l'état 3 (le feu A est au rouge et le feu B est au orange), si on appuie sur le reset il ne se passe rien, car on souhaite finir normalement le cyle et repasser ensuite à l'état 0, comme prévu normalement dans le code VHDL.
+
+\begin{figure}[h]
+\includegraphics[width=10cm]{TP03-3.png}
+\caption{Machine à état des feu avec reset}
+\end{figure}
+
+
+
 \subsection{Code VHDL}
 \begin{lstlisting}
 ENTITY feu IS
@@ -222,29 +319,6 @@ BEGIN
 
 \end{lstlisting}
 
-Sachant que le signal d'entrée du deuxième process est clk\_out et qu'il change d'état toutes les seconde, nous avons décidé de créer un compteur de temps, modélisé par la variable c, qui permet d'incrémenter la variable d'état toutes les 8 puis 2 secondes, plutôt que de faire une machine à 20 états différents.
-
-Pour le reset nous avons défini le comportement du reset pour chacun des 4 états de la machine, afin d'essayer d'avoir le reset le plus sécurisé possible pour les automobiliste.
-
-Ainsi l'état de reset est défini ainsi : feu A au vert et feu B au rouge.
-
-Ainsi dans l'état 0 (feu A au vert et feu B au rouge), si on appuie sur le reset, on remet le compteur à 0 et on reste dans cet état.
-
-Dans l'état 1 (le feu A est orange et le feu B est au rouge), si on appuie sur le reset on peut directement repasser dans l'état 0 aussi, car passer du orange vers le vert n'est, pour nous, pas un dangers pour les automobilistes.
-
-Dans l'état 2 (le feu A est rouge et le feu B est vert), si on appuie sur reset, il faut passer le feu B au orange pendant 2 secondes puis ensuite passer au rouge et passer le feu A au vert. Cette séquence d'instruction correspond à celle qui se passe lorsqu'on est dans l'état 3 et qu'on repasse à l'état 0.
-
-Dans l'état 3 (le feu A est au rouge et le feu B est au orange), si on appuie sur le reset il ne se passe rien, car on souhaite finir normalement le cyle et repasser ensuite à l'état 0, comme prévu normalement dans le code VHDL. 
-
-\begin{figure}[h]
-\includegraphics[width=10cm]{TP03-3.png}
-\caption{Machine à état des feu avec reset}
-\end{figure}
-
-
-
-METTRE LE CODE AVEC LE RESET !
-
 \section{Prise en compte d'un capteur de voiture}
 
 
@@ -256,99 +330,70 @@ On définit donc les séquences comme suivant :
 \begin{itemize}
 	\item S'il n'y a pas de véhicules sur l'axe A, laisser le feu au vert sur l'axe B.
 	\item Si un véhicule arrive sur l'axe A, le feu de l'axe B doit passer au orange, tout en ayant respecté les 8 secondes de feu vert sur l'axe A
-	\item Ces comportements sont valable pour le feu de l'axe B. 
+	\item Ces comportements sont valable pour le feu de l'axe B.
 
 \end{itemize}
 
-On ajoute donc aux phases définies dans l'exercice précédent, à la fin de chaque état, on vérifie l'état des capteurs. Si un véhicule est detecté par les capteurs de l'axe
+Si le feu de l'axe A est vert alors on le passe au orange puis au rouge uniquement
+si un vehicule est detecté sur l'axe B (capteur PB_3).
 
+Même raisonement pour le feu de l'Axe B.
 
-
+On va donc bloquer le compteur qui permet de passer d'un etat à un autre avec
+une condition sur le capteur au moment de passer au orange.
 
 \subsection{Code VHDL}
 \begin{lstlisting}
 
-ENTITY feu IS
-        PORT(Clk100MHz, PB_0 : IN BIT;
-                LED_3210, LED_7654 : OUT INTEGER RANGE 0 TO 15);
-END feu;
+process(clk_out,reset)
+variable c : integer range 0 to 20; --temps total d'un cycle
+variable etat : integer range 0 to 3;
+variable feuA, feuB : integer range 0 to 4;
 
-ARCHITECTURE Behavioural OF feu IS
-alias reset is PB_0;
-signal clk_out : bit := '0';
-constant clock_divisor : integer := 100000000;
-BEGIN
-  clock_divider : PROCESS(Clk100Mhz, reset)
-  variable c : integer range 0 to clock_divisor - 1 := 0;
-    begin
-      if reset = '1' then
-        c := 0;
-        clk_out <= '0';
-      elsif Clk100MHz'event and Clk100MHz = '1' then
+  begin
+    if (reset = '1') then
+			if etat=2 then
+				etat:=3;
+				c:=18;
+			elsif (etat=0 or etat=1) then
+				c := 0;
+        etat := 0;
+			else
+				c := c-1;
+        etat := 3;
+		  end if;
 
-        if c < (clock_divisor - 1) / 2 then
-                c := c + 1;
-                clk_out <= '0';
-        elsif c = (clock_divisor - 1) then
-                c := 0;
-                clk_out <= '0';
-        else
+    elsif (clk_out'Event and clk_out = '1' ) then
+      if c < 8 then
         c := c + 1;
-                clk_out <= '1';
-        end if;
-
+        etat := 0;
+      elsif c < 10 and PB_3 = '1' then
+        c := c + 1;
+        etat := 1;
+      elsif c < 18 then
+        c := c + 1;
+        etat := 2;
+      elsif c < 20 and PB_2 = '1' then
+        c := c + 1;
+        etat := 3;
       end if;
-    end process;
+      if c = 20 then
+         c := 0;
+      end if;
+    end if;
 
-    process(clk_out,reset)
-      variable c : integer range 0 to 20; --temps total d'un cycle
-      variable etat : integer range 0 to 3;
-		  variable feuA, feuB : integer range 0 to 4;
+      case etat is
+          when 0 => feuA := 1; feuB := 4; --le feu de l'axe A est vert et le feu de l'axe B est rouge
+          when 1 => feuA := 2; feuB := 4; --le feu de l'axe A est orange, le feu de l'axe B est rouge
+          when 2 => feuA := 4; feuB := 1; --le feu de l'axe A est rouge, le feu de l'axe B est vert
+          when 3 => feuA := 4; feuB := 2; --le feu de l'axe A est rouge et le feu de l'axe B est orange
+          when others => feuA := 1; feuB := 4;
+      end case;
 
-        begin
-          if (reset = '1') then
-  					if etat=2 then
-  						etat:=3;
-  						c:=18;
-  					elsif (etat=0 or etat=1) then
-  						c := 0;
-              etat := 0;
-  					else
-  						c := c-1;
-              etat := 3;
-  				  end if;
+  LED_3210 <= feuA;
+  LED_7654 <= feuB;
+end process;
 
-          elsif (clk_out'Event and clk_out = '1' ) then
-            if c < 8 then
-              c := c + 1;
-              etat := 0;
-            elsif c < 10 and PB_3 = '1' then
-              c := c + 1;
-              etat := 1;
-            elsif c < 18 then
-              c := c + 1;
-              etat := 2;
-            elsif c < 20 and PB_2 = '1' then
-              c := c + 1;
-              etat := 3;
-            end if;
-            if c = 20 then
-               c := 0;
-            end if;
-          end if;
-
-            case etat is
-                when 0 => feuA := 1; feuB := 4; --le feu de l'axe A est vert et le feu de l'axe B est rouge
-                when 1 => feuA := 2; feuB := 4; --le feu de l'axe A est orange, le feu de l'axe B est rouge
-                when 2 => feuA := 4; feuB := 1; --le feu de l'axe A est rouge, le feu de l'axe B est vert
-                when 3 => feuA := 4; feuB := 2; --le feu de l'axe A est rouge et le feu de l'axe B est orange
-                when others => feuA := 1; feuB := 4;
-            end case;
-
-        LED_3210 <= feuA;
-        LED_7654 <= feuB;
-      end process;
-  END Behavioural;
   \end{lstlisting}
 
   \subsection{Synthèse}
