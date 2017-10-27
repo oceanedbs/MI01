@@ -253,14 +253,26 @@ On définit donc les séquences comme suivant :
 
 \end{itemize}
 
-On ajoute donc aux phases définies dans l'exercice précédent, à la fin de chaque état, on vérifie l'état des capteurs. Si un véhicule est detecté par les capteurs de l'axe
+On décide donc, de définir les 4 états de notre machine à état ainsi :
+\begin{itemize}
+\item Dans l'état 1, si on detecte une voiture avec le capteur A mais aucune voiture avec le capteur B, on reboucle sur ce même état. Dans toutes les autres configurations de capteurs (ex : CapteurA=1 et CapteurB=1), on passe à l'état 2 lorsque c=8.
+\item Dans l'état 2, on ne s'occupe pas des capteurs de voitures, dans tous les cas on passe à l'état 3.
+\item Dans l'état 3, si on detecte une voiture avec le capteur B mais aucune voiture avec le capteur A, on reboucle sur cet état. Pour toutes les autres configurations, lorsque c est égale à 18 on passe à l'état 4.
+\item Dans l'état 4, quelque soit la configuration des capteurs on passe à l'état 1 lorsque c=20.
+
+
+\end{itemize}
+
+
 
 
 
 
 \subsection{Code VHDL}
-\begin{lstlisting}
 
+Le code VHDL que nous avons écrit a partir de cette nouvelle machine à état est le suivant : 
+
+\begin{lstlisting}
 	process(clk_out)
 
 	variable c : integer range 0 to 20; --temps total d'un cycle
