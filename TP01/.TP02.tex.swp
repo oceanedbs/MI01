@@ -11,8 +11,8 @@
 \pagestyle{fancy}
  \usepackage{comment} 
 
- \lhead{Geoffrey PERRIN \\ Océane DUBOIS}
- \rhead{MI01 - TP02 : VHDL séquentiel}
+ \lhead{Louis Caron \\ Océane DUBOIS}
+ \rhead{NF16 - TP03}
  \rfoot{}
 
 
