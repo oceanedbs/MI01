@@ -210,6 +210,12 @@ BEGIN
 
 Sachant que le signal d'entrée du deuxième process est clk\_out et qu'il change d'état toutes les seconde, nous avons décidé de créer un compteur de temps, modélisé par la variable c, qui permet d'incrémenter la variable d'état toutes les 8 puis 2 secondes, plutôt que de faire une machine à 20 états différents.
 
+SIMULATION
+
+\bigskip
+
+Nous cherchons maintenant à intégrer un reset au code précédent.
+
 Pour le reset nous avons défini le comportement du reset pour chacun des 4 états de la machine, afin d'essayer d'avoir le reset le plus sécurisé possible pour les automobiliste.
 
 Ainsi l'état de reset est défini ainsi : feu A au vert et feu B au rouge.
@@ -253,6 +259,11 @@ On décide donc, de définir les 4 états de notre machine à état ainsi :
 \item Dans l'état 3, si on detecte une voiture avec le capteur B mais aucune voiture avec le capteur A, on reboucle sur cet état. Pour toutes les autres configurations, lorsque c est égale à 18 on passe à l'état 4.
 \item Dans l'état 4, quelque soit la configuration des capteurs on passe à l'état 1 lorsque c=20.
 
+
+\begin{figure}[h]
+\includegraphics[width=10cm]{TP03-3.png}
+\caption{Machine à états des feu avec le reset et les capteurs}
+\end{figure}
 
 \end{itemize}
 
@@ -368,7 +379,7 @@ On définit donc les séquences comme suivant :
 \end{itemize}
 
 Si le feu de l'axe A est vert alors on le passe au orange puis au rouge uniquement
-si un vehicule est detecté sur l'axe B (capteur PB_3).
+si un vehicule est detecté sur l'axe B (capteur PB\_3).
 
 Même raisonement pour le feu de l'Axe B.
 
