@@ -117,9 +117,11 @@ On choisi ici de modéliser les feu de circulation à l'aide d'un code en VHDL c
 On réalise un modélisation à partir d'un machine à états
 
 \begin{figure}[h]
-\includegraphics[width=12cm]{TP03-2.png}
+\includegraphics[width=12cm]{TP03-1.png}
 \caption{Machine à état des feux}
 \end{figure}
+
+Dans notre schéma, les états sont les cercles bleus, les flèches représentent les transitions accompagnées de la variable qui déclanche la transition. Les rectangles oranges déterminent ce qui est fait à chaque fois qu'on entre dans l'état.
 
 La machine reste dans l'état 1 pendant 8 secondes, puis dans l'état 2 pendant 2 secondes puis dans l'état 3 pendant 8 secondes et enfin dans l'état 4 pendant 2 secondes. 
 
@@ -129,11 +131,6 @@ Ainsi de 0 à 8 secondes, le feu A est vert et le feu B est au rouge, de 8 à 10
 On utilisera dans le code VHDL des entiers pour différencier les couleurs de feu, soit la valeur 1 pour signaler un feu rouge, 2 pour le feu orange et 4 pour le feu vert.
 
 
-
-
-
-
-// recopier le bon code VHDL
 \subsection{Code VHDL}
 \begin{lstlisting}
 ENTITY feu IS
@@ -237,7 +234,7 @@ Dans l'état 2 (le feu A est rouge et le feu B est vert), si on appuie sur reset
 Dans l'état 3 (le feu A est au rouge et le feu B est au orange), si on appuie sur le reset il ne se passe rien, car on souhaite finir normalement le cyle et repasser ensuite à l'état 0, comme prévu normalement dans le code VHDL. 
 
 \begin{figure}[h]
-\includegraphics[width=10cm]{TP03-3.png}
+\includegraphics[width=10cm]{TP03-2 .png}
 \caption{Machine à état des feu avec reset}
 \end{figure}
 
