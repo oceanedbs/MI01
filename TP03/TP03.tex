@@ -119,13 +119,13 @@ On choisi ici de modéliser les feu de circulation à l'aide d'un code en VHDL c
 On réalise un modélisation à partir d'un machine à états
 
 \begin{figure}[h]
-\includegraphics[width=12cm]{TP03-1.png}
+\includegraphics[width=12cm]{TP03-9.png}
 \caption{Machine à état des feux}
 \end{figure}
 
 Dans notre schéma, les états sont les cercles bleus, les flèches représentent les transitions accompagnées de la variable qui déclanche la transition. Les rectangles oranges déterminent ce qui est fait à chaque fois qu'on entre dans l'état.
 
-La machine reste dans l'état 1 pendant 8 secondes, puis dans l'état 2 pendant 2 secondes puis dans l'état 3 pendant 8 secondes et enfin dans l'état 4 pendant 2 secondes. 
+La machine reste dans l'état 1 pendant 8 secondes, puis dans l'état 2 pendant 2 secondes puis dans l'état 3 pendant 8 secondes et enfin dans l'état 4 pendant 2 secondes.
 
 Ainsi de 0 à 8 secondes, le feu A est vert et le feu B est au rouge, de 8 à 10 secondes, le feu A est orange et le feu B est rouge, de 10 à 18 secondes, le feu A est rouge et le feu B est vert et de 18 à 30 secondes, le feu A est rouge et le feu B est orange. A la fin, on recommence le cycle depuis le début.
 
@@ -134,37 +134,6 @@ On utilisera dans le code VHDL des entiers pour différencier les couleurs de fe
 
 
 \subsection{Code VHDL sans prendre en compte le reset}
- CODE SANS RESET
-
-Sachant que le signal d'entrée du deuxième process est clk\_out et qu'il change d'état toutes les seconde, nous avons décidé de créer un compteur de temps, modélisé par la variable c, qui permet d'incrémenter la variable d'état toutes les 8 puis 2 secondes, plutôt que de faire une machine à 20 états différents.
-\subsection{Simulation sans le reset}
-
-
-\subsection{Code VHDL avec le reset}
-
-Nous cherchons maintenant à intégrer un reset au code précédent.
-
-Pour le reset nous avons défini le comportement du reset pour chacun des 4 états de la machine, afin d'essayer d'avoir le reset le plus sécurisé possible pour les automobiliste.
-
-Ainsi l'état de reset est défini ainsi : feu A au vert et feu B au rouge.
-
-Ainsi dans l'état 0 (feu A au vert et feu B au rouge), si on appuie sur le reset, on remet le compteur à 0 et on reste dans cet état.
-
-Dans l'état 1 (le feu A est orange et le feu B est au rouge), si on appuie sur le reset on peut directement repasser dans l'état 0 aussi, car passer du orange vers le vert n'est, pour nous, pas un dangers pour les automobilistes.
-
-Dans l'état 2 (le feu A est rouge et le feu B est vert), si on appuie sur reset, il faut passer le feu B au orange pendant 2 secondes puis ensuite passer au rouge et passer le feu A au vert. Cette séquence d'instruction correspond à celle qui se passe lorsqu'on est dans l'état 3 et qu'on repasse à l'état 0.
-
-Dans l'état 3 (le feu A est au rouge et le feu B est au orange), si on appuie sur le reset il ne se passe rien, car on souhaite finir normalement le cyle et repasser ensuite à l'état 0, comme prévu normalement dans le code VHDL.
-
-\begin{figure}[h]
-\includegraphics[width=10cm]{TP03-2.png}
-\caption{Machine à état des feu avec reset}
-\end{figure}
-
-\medskip
-
-Voici le code VHDL avec le reset :
-
 \begin{lstlisting}
 ENTITY feu IS
 	PORT (
@@ -240,9 +209,124 @@ END Behavioural;
 
 
 \end{lstlisting}
+
+Sachant que le signal d'entrée du deuxième process est clk\_out et qu'il change d'état toutes les seconde, nous avons décidé de créer un compteur de temps, modélisé par la variable c, qui permet d'incrémenter la variable d'état toutes les 8 puis 2 secondes, plutôt que de faire une machine à 20 états différents.
+\subsection{Simulation sans le reset}
+
+\begin{figure}[h]
+\includegraphics[width=13cm]{TP03-5.png}
+\caption{Reset Cas 3}
+\end{figure}
+ Ici on voit bien que le feut vert de l'axe A dure 8 seconde, le feu orange de l'axe A 2 secondes et le feu rouge de l'axe B 10 secondes.
+(on commence au premier front montant de l'horloge d'où le décallage de 0,5s sur la simulation)
+ La deuxieme partie du cycle de la 10ème à la 20ème seconde est l'inverse de la pemiere partie du cycle.
+\subsection{Code VHDL avec le reset}
+
+Nous cherchons maintenant à intégrer un reset au code précédent.
+
+Pour le reset nous avons défini le comportement du reset pour chacun des 4 états de la machine, afin d'essayer d'avoir le reset le plus sécurisé possible pour les automobiliste.
+
+Ainsi l'état de reset est défini ainsi : feu A au vert et feu B au rouge.
+
+Ainsi dans l'état 0 (feu A au vert et feu B au rouge), si on appuie sur le reset, on remet le compteur à 0 et on reste dans cet état.
+
+Dans l'état 1 (le feu A est orange et le feu B est au rouge), si on appuie sur le reset on peut directement repasser dans l'état 0 aussi, car passer du orange vers le vert n'est, pour nous, pas un dangers pour les automobilistes.
+
+Dans l'état 2 (le feu A est rouge et le feu B est vert), si on appuie sur reset, il faut passer le feu B au orange pendant 2 secondes puis ensuite passer au rouge et passer le feu A au vert. Cette séquence d'instruction correspond à celle qui se passe lorsqu'on est dans l'état 3 et qu'on repasse à l'état 0.
+
+Dans l'état 3 (le feu A est au rouge et le feu B est au orange), si on appuie sur le reset il ne se passe rien, car on souhaite finir normalement le cyle et repasser ensuite à l'état 0, comme prévu normalement dans le code VHDL.
+
+\begin{figure}[h]
+\includegraphics[width=10cm]{TP03-2.png}
+\caption{Machine à état des feu avec reset}
+\end{figure}
+
+\medskip
+
+Voici le code VHDL du PROCESS avec le reset :
+\begin{lstlisting}
+PROCESS (clk_out)
+VARIABLE c : INTEGER RANGE 0 TO 20; --temps total d'un cycle
+VARIABLE etat : INTEGER RANGE 0 TO 3;
+VARIABLE feuA, feuB : INTEGER RANGE 0 TO 4;
+
+  BEGIN
+
+  IF (reset = '1') THEN
+    IF etat = 2 THEN
+      etat := 3;
+      c := 18;
+    ELSIF (etat = 0 OR etat = 1) THEN
+      c := 0;
+      etat := 0;
+    ELSE
+      c := c - 1;
+      etat := 3;
+    END IF;
+
+
+    IF (clk_out'EVENT AND clk_out = '1') THEN
+      IF c < 8 THEN
+        c := c + 1;
+        etat := 0;
+      ELSIF c < 10 THEN
+        c := c + 1;
+        etat := 1;
+      ELSIF c < 18 THEN
+        c := c + 1;
+        etat := 2;
+      ELSIF c < 20 THEN
+        c := c + 1;
+        etat := 3;
+      END IF;
+      IF c = 20 THEN
+        c := 0;
+      END IF;
+    END IF;
+
+    CASE etat IS
+      WHEN 0 => feuA := 1; feuB := 4; --le feu de l'axe A est vert et le feu de l'axe B est rouge
+      WHEN 1 => feuA := 2; feuB := 4; --le feu de l'axe A est orange, le feu de l'axe B est rouge
+      WHEN 2 => feuA := 4; feuB := 1; --le feu de l'axe A est rouge, le feu de l'axe B est vert
+      WHEN 3 => feuA := 4; feuB := 2; --le feu de l'axe A est rouge et le feu de l'axe B est orange
+      WHEN OTHERS => feuA := 1; feuB := 4;
+    END CASE;
+
+    LED_3210 <= feuA;
+    LED_7654 <= feuB;
+  END PROCESS;
+END Behavioural;
+
+
+\end{lstlisting}
+
 \subsection{Simulation avec reset}
 
+\begin{figure}[h]
+\includegraphics[width=13cm]{TP03-6.png}
+\caption{Reset Cas 1}
+\end{figure}
 
+Le reset est activé pedant l'état 1 (feu vert sur l'axe A).
+Le compteur est donc remis a 0 et le cycle de 8 secondes recommence au front montant de l'horloge qui suit le reset.
+
+\begin{figure}[h]
+\includegraphics[width=13cm]{TP03-7.png}
+\caption{Reset Cas 2}
+\end{figure}
+
+Le reset est activé pendant l'état 2 (feu orange sur l'Axe A).
+On retourne donc a l'état 0 (feu vert sur l'axe A) et on recommence un cycle de 8 secondes.
+
+\begin{figure}[h]
+\includegraphics[width=13cm]{TP03-8.png}
+\caption{Reset Cas 3}
+\end{figure}
+
+Le reset est activé pednant l'état 3 ( feu vert sur l'axe B)
+On passe a l'état 4 (on passe le feu orange sur l'axe B) puis on passe a l'état 1.
+
+Enfin si le reset est activé a l'état 4 on ne fait rien et on attend de repasser a l'état 0.
 
 
 
@@ -263,9 +347,9 @@ On définit donc les séquences comme suivant :
 
 On décide donc, de définir les 4 états de notre machine à état ainsi :
 \begin{itemize}
-\item Dans l'état 1, si on detecte une voiture avec le capteur B on passe le feu au orange puis au rouge.
+\item Dans l'état 1, on attend les 8 secondes puis on passe a l'état 2 si on detecte une voiture avec le capteur B.
 \item Dans l'état 2, on ne s'occupe pas des capteurs de voitures, dans tous les cas on passe à l'état 3.
-\item Dans l'état 3, si on detecte une voiture avec le capteur A, on passe le feu B au orage puis au rouge.
+\item Dans l'état 3, on attend les 8 secondes puis on passe a l'état 4 si on detecte une voiture avec le capteur A.
 \item Dans l'état 4, quelque soit la configuration des capteurs on passe à l'état 1 lorsque c=20.
 
 
@@ -278,7 +362,7 @@ On décide donc, de définir les 4 états de notre machine à état ainsi :
 \end{figure}
 
 
-On va donc bloquer le compteur qui permet de passer d'un etat à un autre avec
+On va donc bloquer le compteur qui permet de passer de l'état feu verre a l'état feu orange avec
 une condition sur le capteur au moment de passer au orange.
 
 \subsection{Code VHDL}
@@ -306,13 +390,13 @@ BEGIN
 		IF c < 8 THEN
 			c := c + 1;
 			etat := 0;
-		ELSIF c < 10 AND PB_3 = '1' THEN
+		ELSIF c < 10 AND PB_3 = '1' AND c > 7 THEN
 			c := c + 1;
 			etat := 1;
-		ELSIF c < 18 THEN
+		ELSIF c < 18 AND c > 9  THEN
 			c := c + 1;
 			etat := 2;
-		ELSIF c < 20 AND PB_2 = '1' THEN
+		ELSIF c < 20 AND PB_2 = '1' AND c > 17 THEN
 			c := c + 1;
 			etat := 3;
 		END IF;
@@ -320,6 +404,8 @@ BEGIN
 			c := 0;
 		END IF;
 	END IF;
+
+
 
 	CASE etat IS
 		WHEN 0 => feuA := 1;
@@ -338,11 +424,12 @@ BEGIN
 	LED_7654 <= feuB;
 END PROCESS;
   \end{lstlisting}
-  
-  Pour le reset nous avons décidé de garder le comportement que nous avions défini précédement. En effet, il ne nous a pas semblé utile de changer son comportement et son mode de fonctionnement puisque ce dernier répond déjà aux exigences que nous nous étions fixé. 
+
+  Pour le reset nous avons décidé de garder le comportement que nous avions défini précédement. En effet, il ne nous a pas semblé utile de changer son comportement et son mode de fonctionnement puisque ce dernier répond déjà aux exigences que nous nous étions fixé.
 
   \subsection{Simulation}
 
+  \includegraphics[width=13cm]{TP03-4.png}
 
 
 
