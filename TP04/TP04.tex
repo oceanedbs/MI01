@@ -94,9 +94,13 @@ L'algorithme implémenté correspond donc à un while(msg[ebx] != 0)
 \section{Exercice : conversion et afficahge de nombres}
 
 Dans ce programme on cherche à convertir et afficher des nombres en différentes bases. 
-Pour cela on utiliser une chaine de caractère de taille n pour stocker la conversion de nombre. Sachant nombre exprimé en base 2 sur 32 bits, le nombre max de bits utiles pour pouvoir écrire le résultat de nombre est donc 10. (car le résultat de $2^{32}$ s'écrit sur 10 chiffres, il faut donc une chaîne de 10 caractères). 
+Pour cela on utiliser une chaine de caractère de taille n pour stocker la conversion de nombre. Sachant nombre exprimé en base 2 sur 32 bits. Sa valeur maximale serat donc FFFFFFFFh soit $2^{32}$. Nous souhaitons convertir le tout en base 10, on résout donc $2^{32}=10^n$. On obtient donc n=10
 
+Pour convertir on utilisera la méthode des divisions successive qui fonctionne pour les entiers non signés. On divise donc successivement l'entier par la base de conversion, on stocke les restes et on divise le résultat jusqu'à ce qu'il soit plus petit que la base choisie. Les restes correspondent aux octets de poids de plus en plus faible.
 
+???
+
+\medskip
 
 En base 35,  95c8ah est égale à 480724667
 

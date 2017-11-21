@@ -23,14 +23,16 @@ chaine      db      10 dup(?)       ; Remplacer xx par la longueur maximale n de
 ; démarrage 'C'
 public      main
 main        proc
-
+			push 	eax		; sauvegarde des registres
 			push    ebx             ; Sauvegarde pour le code 'C'
 
-			xor		ebx, ebx
-			xor		eax, eax
-			mov		ecx, 16
-			mov		eax, [nombre]
-suivant :	div		dword ptr ecx
+			xor	ebx, ebx
+			xor	eax, eax
+			mov	ecx, 10
+			mov	eax, [nombre]
+			mov	ebx, [nombre]
+suivant :		xor 	edx, edx		
+			div	ecx
 			push	edx
 
 			mov		[chaine+ebx], dl
