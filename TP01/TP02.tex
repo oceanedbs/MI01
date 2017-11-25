@@ -38,7 +38,7 @@
   tabsize=3
 }
 
- 
+
 %Gummi|065|=)
 \title{\textbf{TP02 - VHDL séquentiel}
 \author{Geoffrey PERRIN \\ Océane DUBOIS\\}
@@ -53,12 +53,12 @@
 
 \section{Compteur de 2 bits}
 
-Dans cet exercice on cherche à implémenter le  modèle VHDL d'un compteur synchrone à 2 bits, 
+Dans cet exercice on cherche à implémenter le  modèle VHDL d'un compteur synchrone à 2 bits,
 On utilisera : \begin{itemize}
 	 \item  une entrée  pour le reset : PB\_1. Cette entrée est un bouton poussoir qui remet le compteur à '0' si on le met à '1'.
 	\item un signal d'entrée (un bouton) PB\_0 , un autre bouton poussoir,qui incrémente le compteur lorsqu'on le met à 1.
 	 \item le signal LED\_10 comme signal de sortie, qui est un groupe de 2 led qui permet d'afficher le resultat du compteur.
-	 
+
 	\end{itemize}
 
 \medskip
@@ -88,7 +88,7 @@ PROCESS(PB_0)
 VARIABLE resultat:INTEGER range 0 to 3 := 0;
 BEGIN
 	IF(PB_0'EVENT and PB_0='1') THEN
-		IF PB_1 = '0' THEN 
+		IF PB_1 = '0' THEN
 			resultat := resultat + 1;
 		ELSE
 			resultat := 0;
@@ -103,7 +103,7 @@ end Behavioral;
 
 \end{lstlisting}
 
-Et voici maintenant le code du reset asynchrone. On a simplement passé le signal du reset dans la liste de sensibilité du process et on peut activer le reset indépendemment du signal PB\_0, puisque l'activation du reset ne se trouve plus à l'intérieur de la condition "IF(PB\_0'EVENT and PB\_0='1') THEN". Il peut donc se déclancher indépendamment de l'activation du compteur. 
+Et voici maintenant le code du reset asynchrone. On a simplement passé le signal du reset dans la liste de sensibilité du process et on peut activer le reset indépendemment du signal PB\_0, puisque l'activation du reset ne se trouve plus à l'intérieur de la condition "IF(PB\_0'EVENT and PB\_0='1') THEN". Il peut donc se déclancher indépendamment de l'activation du compteur.
 
 
 \begin{lstlisting}
@@ -134,6 +134,15 @@ END Behavioral;
 
 \end{lstlisting}
 
+<<<<<<< HEAD
+Une fois que les deux programmes sont écrits on procède à la synthèse des programmes.
+
+ \subsection{ b) Synthèse du code VHDL }
+
+ Avertissement sur PB\_0 ???????
+
+ Voici la synthèse avec le code du reset synchrone :
+=======
 Une fois que les deux programmes sont écrits on procède à la synthèse des programmes. 
 
  \subsection{ Synthèse du code VHDL }
@@ -141,6 +150,7 @@ Une fois que les deux programmes sont écrits on procède à la synthèse des pr
 La synthèse nous permet d'obtenir 2 schémas : RTL et Technology. Le schéma RTL est celui qui se rapproche le plus du code VHDL. Il est composé de boites, représentants des multiplicateurs, additionneurs, compteurs ... Ces boîtes peuveunt être reliées entre elles par des portes logiques AND, OR ...  On y voit pas de composants physiques. 
  
  Voici le schéma RTL avec le code du reset synchrone :
+>>>>>>> master
 
  \begin{figure}[h]
 \begin{center}
@@ -150,9 +160,13 @@ La synthèse nous permet d'obtenir 2 schémas : RTL et Technology. Le schéma RT
 \end{figure}
 
 
+<<<<<<< HEAD
+On remarque bien les deux entrée PB\_0 et PB\_1, le compteur au milieu du composant et la LED\_10 qui correspond à la sortie.
+=======
 On remarque bien les deux entrée PB\_0 et PB\_1, le compteur au milieu du composant et la LED\_10 qui correspond à la sortie. Le syntéhtiseur à donc bien reconnu le code comme étant un compteur.
+>>>>>>> master
 
-Voici maintenant la vue technologique du code avec le reset synchrone : 
+Voici maintenant la vue technologique du code avec le reset synchrone :
 
 \begin{figure}[h!]
 \begin{center}
@@ -161,17 +175,28 @@ Voici maintenant la vue technologique du code avec le reset synchrone :
 \end{center}
 \end{figure}
 
+<<<<<<< HEAD
+Au niveau de la sortie on a bien les 2 LED qui sont présentes. Le résultat de la LED 0 est calculé par le bloc fdr resultat\_0, le résultat de la led 1 est calculé par le bloc fdr resultat\_1.
+Le reset (l'entrée PB\_1) est est reliée à ces 2 même blocs pour les remettre à 0 si besoin.
+C'est le bloc lut2 qui lorsque le bloc fdr resultat\_0 ne peut plus calculer sur 1 bit le résultat, passe le résultat au bloc fdr resultat\_1.
+=======
 Au niveau de la sortie on a bien les 2 LED qui sont présentes. Le résultat de la LED 0 est calculé par le bloc fdr resultat\_0, le résultat de la led 1 est calculé par le bloc fdr resultat\_1. 
 Le reset (l'entrée PB\_1) est reliée à ces 2 même blocs pour les remettre à 0 si besoin. 
 C'est le bloc lut2 qui lorsque le bloc fdr resultat\_0 ne peut plus calculer sur 1 bit le résultat, passe le résultat au bloc fdr resultat\_1. 
+>>>>>>> master
 
 Tous les composants apparaissant sont des composants qui existent réellement sur le FPGA. 
 
 \newpage
+<<<<<<< HEAD
+
+\subsection{ c) Simulation du circuit}
+=======
  
 \subsection{ Simulation du circuit}
+>>>>>>> master
 
-Ensuite nous effectuons la simulation du circuit grâce au logiciel. 
+Ensuite nous effectuons la simulation du circuit grâce au logiciel.
 En faisant varier les 2 signaux d'entrée voici le résultat que nous obtenons.
 
 \begin{figure}[h]
@@ -188,8 +213,21 @@ Ce n'est pas le cas avec un reset asynchrone, dont voici la simulation :
 \caption{Simulation du compteur avec reset asynchrone}
 \end{figure}
 
-Ici on peut voir que le reset prend effet dès sont activation, on n'a pas besoin que PB\_0 soit activé. 
+Ici on peut voir que le reset prend effet dès sont activation, on n'a pas besoin que PB\_0 soit activé.
 
+
+<<<<<<< HEAD
+   \subsection{ d) programmation du FPGA et vérification du fonctionnement}
+
+   Lorsqu'on programme le FPGA et qu'on télécharge le code sur la carte, on observe bien les 2 comportements attendus avec les reset synchrone et asynchrone.
+   De plus les 2 leds ne peuvent afficher que les résultats allant de 0 à 3. Une fois que le compteur dépasse la valeur 3, le résultat est affiché modulo 4.
+
+
+\newpage
+\newpage
+
+
+=======
   
    \subsection{programmation du FPGA et vérification du fonctionnement}
    
@@ -199,6 +237,7 @@ Ici on peut voir que le reset prend effet dès sont activation, on n'a pas besoi
 
    
  
+>>>>>>> master
 
 \section{Détecteur de code}
 
@@ -211,7 +250,7 @@ Dans cet exercice on réalisera un détécteur pour le code 11010. Si le code es
 
 \end{itemize}
 
-Dans cette première modélisation on supposera qu'une fausse entrée implique de tout recommencer. 
+Dans cette première modélisation on supposera qu'une fausse entrée implique de tout recommencer.
 
 On décide de modéliser le code par une machine à 5 états avec chaque état correspondant à une bonne entrée du code.
 
@@ -247,33 +286,33 @@ variable state : INTEGER RANGE 0 to 15;
 begin
  if(PB_0'Event and PB_0 = '1') then
   case state is
-   when 0 => if (SW_0 = '1') then 
-      			state := 1; 
-      			LED_0 <= '0'; 
+   when 0 => if (SW_0 = '1') then
+      			state := 1;
+      			LED_0 <= '0';
 			else LED_0 <= '0';
        		end if;
-   when 1 => if (SW_0 = '1') then 
-      			state := 2; 
+   when 1 => if (SW_0 = '1') then
+      			state := 2;
        		else
-       			LED_0 <= '0'; 
-      			state :=0; 
-      		end if;
-   when 2 => if (SW_0 = '0') then 
-      			state := 3; 
-			else 
        			LED_0 <= '0';
-        		 state :=0; 
+      			state :=0;
+      		end if;
+   when 2 => if (SW_0 = '0') then
+      			state := 3;
+			else
+       			LED_0 <= '0';
+        		 state :=0;
       		 end if;
-   when 3 => if (SW_0 = '1') then 
-    			state := 4; 
+   when 3 => if (SW_0 = '1') then
+    			state := 4;
        		else
-         		LED_0 <= '0'; 
-         		state :=0; 
+         		LED_0 <= '0';
+         		state :=0;
        		end if;
-   when 4 => if (SW_0 = '0') then 
-     			 state := 0; 
+   when 4 => if (SW_0 = '0') then
+     			 state := 0;
 				LED_0 <= '1';
-			else 
+			else
      			state :=0;
      		end if;
   when others => state := 0;
@@ -287,9 +326,13 @@ end Behavioral;
 
 \end{lstlisting}
 
+<<<<<<< HEAD
+Dans ce code, nous nous sommes basés sur un diagramme à 5 états (de 0 à 4). A chaque entrée qui correpond au code à detecter, on incrémente la variable state, si il y a une fausse entrée, on repasse la variable state à 0 et on doit recommencer le code depuis le début. Lorsqu'on arrive à l'état 4 et que le dernier chiffre du code est correctement rentré, on passe la led à 1 pour quelle s'allume. On passe également l'état à 5 pour que lors du cycle suivant, on passe dans la condition "WHEN OTHERS" qui remet l'état à 0. De plus à chaque état nous avons ajouté l'instruction qui permet d'éteindre la LED si le chiffre rentré n'est pas le bon. Nous sommes ainsi sûrs que la LED ne s'allume que si le code correct est rentré et qu'elle s'éteint dans toutes les autres situations.
+=======
 Dans ce code, nous nous sommes basés sur un diagramme à 5 états (de 0 à 4). A chaque entrée qui correpond au code à executer, on incrémente la variable state, si il y a une fausse entrée, on repasse la variable state à 0 et on doit recommencer le code depuis le début. Lorsqu'on arrive à l'état 4 et que le dernier chiffre du code est correctement rentré, on passe la led à 1 pour quelle s'allume. On passe également l'état à 5 pour que lors du cycle suivant, on passe dans la condition "WHEN OTHERS" qui remet l'état à 0. De plus à chaque état nous avons ajouté l'instruction qui permet d'éteindre la LED si le chiffre rentré n'est pas le bon. Nous sommes ainsi sûrs que la LED ne s'allume que si le code correct est rentré et qu'elle s'éteint dans toutes les autres situations. 
+>>>>>>> master
 
-Nous égalisons la variable d'état avec le groupe de LED 7654, cela nous permet de savoir à quel état de la machine à état nous sommes, dans l'entrée du code. 
+Nous égalisons la variable d'état avec le groupe de LED 7654, cela nous permet de savoir à quel état de la machine à état nous sommes, dans l'entrée du code.
 
 
 \subsection{ Synthèse du code VHDL }
@@ -305,7 +348,7 @@ Nous avons ensuite réalisé la simultaion RTL et Technology du code, voilà ce 
 \end{figure}
 
 
-Nous pouvons donc voir les 3 LED utilisées en sortie pour afficher l'état en plus de la LED\_0 pour afficher l'alarme. 
+Nous pouvons donc voir les 3 LED utilisées en sortie pour afficher l'état en plus de la LED\_0 pour afficher l'alarme.
 
 Pour signal d'horloge, la valeur entrée passe dans un opérateur ET avec le résultat de l'alarme. Puis le résultat des 2 est dirigé vers le bloc LED\_mux\_0.
 
@@ -317,7 +360,7 @@ Le bloc LED\_mux\_0 qui gère donc l'alarme prend donc en entrée les valeurs de
 
 Le bloc qui gère la variable state à en sortie une ligne qui se dirige vers chaque LED qui representent la variable state pour les remettre mettre à jour au fur et à mesure.
 
-Il y a aussi une ligne qui rejoins toutes les LED du circuit. Ainsi lorsque l'état 4 est atteint on peut allumer la LED d'alarme. 
+Il y a aussi une ligne qui rejoins toutes les LED du circuit. Ainsi lorsque l'état 4 est atteint on peut allumer la LED d'alarme.
 
 Et comme déjà dit, une ligne de sortie par valeur de la variable d'état.
 
@@ -347,6 +390,16 @@ Les bits d'états sont au nombre de 6, sur le schéma RTL ils sont représentés
 
 \end{itemize}
 
+<<<<<<< HEAD
+  ????? Nombre de bits utilisés par le detecteur et sous quelle forme
+  ??? Equation de génération de la sortie
+
+
+
+  \subsection{ c) Simulation du circuit}
+
+Lors de la simulation, voici ce que nous avons obtenu, on remarque donc bien que dès qu'une fausse entrée est entrée, la variable d'état retombe à 0.
+=======
 D'après le schéma RTL on peut définir les équations de sorties. 
   
  Au niveau des équations de sorties on a donc : \medbreak
@@ -366,16 +419,25 @@ D'après le schéma RTL on peut définir les équations de sorties.
   \subsection{ Simulation du circuit}
  
 Lors de la simulation, voici ce que nous avons obtenu, on remarque donc bien que dès qu'une fausse entrée est entrée, la variable d'état retombe à 0. 
+>>>>>>> master
 
 \begin{figure}[!h]
 \includegraphics[width=15cm]{TP02-7.PNG}
 \caption{Simulation du décodeur, un fausse entrée fait recommencer du début}
 \end{figure}
+<<<<<<< HEAD
+
+
+   \subsection{ d) programmation du FPGA}
+
+Nous avons donc programmé le FPGA et tout à fonctionné correctement.
+=======
   
   
    \subsection{ programmation du FPGA}
 
 Nous avons donc programmé le FPGA et tout à fonctionné correctement. La machine à état progresse d'état en état à chaque entrée correcte. Ou retombe à 0 si une fausse entrée est mise. 
+>>>>>>> master
 
 \section{Détecteur de code avec une fausse entrée négligée}
 
@@ -388,7 +450,7 @@ Dans cet exercice on réalisera un détécteur pour le code 11010. Si le code es
 
 \end{itemize}
 
-Dans cette première modélisation on supposera qu'une fausse entrée est négligée. 
+Dans cette première modélisation on supposera qu'une fausse entrée est négligée.
 
 \subsection{Ecriture du code VHDL}
 
@@ -405,47 +467,44 @@ architecture Behavioral of decodeur is
 begin
 	process(PB_0)
 	variable state : INTEGER RANGE 0 to 5;
-	begin
-	if(PB_0'Event and PB_0 = '1') then
-		case state is
-			when 0 => if (SW_0 = '1') then 
-						state := 1; 
-						LED_0 <= '0'; 
-					end if;	
-			when 1 => if (SW_0 = '1') then 
-						state := 2; 
-					else 
-						LED_0 <= '0'; 
-						state :=1; 
-					end if;
-			when 2 => if (SW_0 = '0') then 
-						state := 3; 
-					else 
-						LED_0 <= '0';
-						state :=2; 
-					end if;
-			when 3 => if (SW_0 = '1') then 
-						state := 4; 
-					else
-						LED_0 <= '0'; 
-  						state :=3; 
-					end if;
-			when 4 => if (SW_0 = '0') then 
-						state := 5; 
-					else LED_0 <= '0'; 
-						state :=4;
-					end if;
-			when others => state := 0;
-		end case;
-	
-		LED_7654 <= state;
-	end if;
-	end process;
-end Behavioral;
+  begin
+  	process(PB_0)
+  	variable state : INTEGER RANGE 0 to 4;
+  	begin
+  	if(PB_0'Event and PB_0 = '1') then
+  		case state is
+  			when 0 => if (SW_0 = '1') then
+  						state := 1;
+  						LED_0 <= '0';
+  					end if;
+  			when 1 => if (SW_0 = '1') then
+  						state := 2;
+  					end if;
+  			when 2 => if (SW_0 = '0') then
+  						state := 3;
+  					end if;
+  			when 3 => if (SW_0 = '1') then
+  						state := 4;
+  					end if;
+  			when 4 => if (SW_0 = '0') then
+  						LED_0 <= '1';
+  					end if;
+
+  			when others => state := 0;
+  		end case;
+
+  		LED_7654 <= state;
+  	end if;
+  	end process;
+  end Behavioral;
 
 \end{lstlisting}
 
+<<<<<<< HEAD
+On a donc, comme précédement mis l'instruction LED\_0 <='0', pour être sûrs que la LED est éteinte. De plus dans le "ELSE", nous avons écrit l'instruction permettant de maintenir l'état à sa valeur actuelle.
+=======
 On a donc, comme précédement mis l'instruction $LED\_0  \leftarrow'0'$, pour être sûrs que la LED est éteinte. De plus dans le "ELSE", nous avons écrit l'instruction permettant de maintenir l'état à sa valeur actuelle. 
+>>>>>>> master
 
 
 
@@ -459,6 +518,10 @@ On a donc, comme précédement mis l'instruction $LED\_0  \leftarrow'0'$, pour �
 
 On a toujours le même nombre de bit d'états, soit 6. Cependant les équations de sorties sont plus compliquées et font intervenir beaucoup plus de signaux. 
 
+<<<<<<< HEAD
+LE NOMBRE DE BITS D'ETATS EST-IL LE MEME
+EQUATION DE TRANSITION ET DE SORTIE PLUS SIMPLE ?
+=======
 Si on suppose $LED\_0_t$ l'état de LED\_0 à l'instant t. 
 On a : \medbreak
  $LED\_0_t =  (((LED\_0_{t-1} ET (SW\_0)) OR (NOT SW\_0) ET (OUT4)) \\ OU (LED\_0_{t-1} ET (NOT SW\_0)) ET (OUT\_3)) \\ OU (LED\_0_{t-1} ET (SW\_0) ET (OUT\_2)) \\ OU ((( LES\_0_{t-1} ET (SW\_0)) OR (NOT SW\_0)) ET (OUT1)) \\ OU (((LED\_0_{t-1} ET (SW\_0)) OR (NOT SW\_0)) ET (OUT0))$
@@ -492,12 +555,16 @@ On a : \medbreak
 
 
 
+>>>>>>> master
+
+
+  \subsection{ c) Simulation du circuit}
+
+DIFFERENCE PAR RAPPORT A L'EXERCICE 2 ? BITS D'ETATS COHERENTS AVEC VHDL ?
 
 
 
 
 
 
-
-
-
+\end{document}
