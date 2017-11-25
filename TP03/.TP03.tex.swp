@@ -7,7 +7,7 @@
 \pagestyle{fancy}
 
  \lhead{Geoffrey PERRIN \\ Océane DUBOIS}
- \rhead{MI01 - TP03}
+ \rhead{MI01 - TP03 : VHDL séquentiel temporisé}
  \rfoot{}
 
 

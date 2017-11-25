@@ -2,7 +2,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
  \usepackage{listings}
-
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{color}
@@ -58,6 +57,8 @@
 
 Dans le fichier "hello1.asm", la variable msg est définie comme un suite de bytes contenant "bonjour tout le monde".
 La variable longueure est définie comme un data double word (il occupe ainsi tout un registre) contenant la valeur 21 soit le nombre de caractères (occupant chacun un byte) de la chaîne de caractère msg.
+
+\lstinputlisting[language=[Motorola68k]Assembler]{hello1.asm}
 
 Le programme fonctionne donc ainsi :
 \begin{itemize}
