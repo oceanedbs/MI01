@@ -15,7 +15,8 @@ extern      getchar:near
 .data
 
 nombre      dd      95c8ah          ; Nombre à convertir
-chaine      db      10 dup(?)       ; Remplacer xx par la longueur maximale n de la chaîne
+chaine      db      35 dup(?)       ; Remplacer xx par la longueur maximale n de la chaîne
+chiffres db "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 .code
 
@@ -23,25 +24,34 @@ chaine      db      10 dup(?)       ; Remplacer xx par la longueur maximale n de
 ; démarrage 'C'
 public      main
 main        proc
-			push 	eax		; sauvegarde des registres
+			push 	eax				; sauvegarde des registres
 			push    ebx             ; Sauvegarde pour le code 'C'
 
 			xor	ebx, ebx
 			xor	eax, eax
-			mov	ecx, 10
+			mov	ecx, 35
 			mov	eax, [nombre]
-			mov	ebx, [nombre]
+			cmp eax, 0
+			jge suivant
+			dec eax
+			not eax
+			push 	eax				; sauvegarde des registres
+			push	ecx
+			push    "-"       ; on affiche le - si le nombre est négatif
+            call    putchar     ; Appel de putchar
+            add     esp, 4      ; Nettoyage de la pile après appel
+			pop ecx
+			pop eax
+
 suivant :		xor 	edx, edx		
 			div	ecx
-			push	edx
-
+			
 			mov		[chaine+ebx], dl
-			add     esp, 4      ; Nettoyage de la pile après appel
             inc		ebx
-			cmp		edx, 0
+			cmp		eax, 0
 			jne		suivant
-
-			xor ebx, ebx
+			dec		ebx
+		
 
 affichage : movzx   eax, byte ptr[ebx + chaine]
 
@@ -49,19 +59,19 @@ affichage : movzx   eax, byte ptr[ebx + chaine]
             ; pour afficher un caractère. La taille du type C 'int' 
             ; est de 32 bits sur IA-32. Le caractère doit être fourni
             ; sur la pile.
-            push    eax         ; Caractère à afficher
+			lea		edx, [chiffres + eax]
+            push    [edx]         ; Caractère à afficher
             call    putchar     ; Appel de putchar
             add     esp, 4      ; Nettoyage de la pile après appel
             ; Fin de l'appel à putchar
 
-            inc     ebx             ; Caractère suivant
-            cmp     eax, 0 ; Toute la longueur ?
-            jne     affichage         ; si non, passer au suivant
+            dec     ebx             ; Caractère suivant
+            cmp     ebx,10 ; Toute la longueur ?
+            jb     affichage         ; si non, passer au suivant
 
             call    getchar         ; Attente de l'appui sur "Entrée"
 
 			pop     ebx
-
             ret                     ; Retour au code de démarrage 'C'
 
 main       endp
