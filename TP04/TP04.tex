@@ -14,31 +14,31 @@
  \rfoot{}
 
 
- 
+
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
- 
+
 \lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
+    backgroundcolor=\color{backcolour},
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
+    showtabs=false,
     tabsize=2
 }
- 
+
 \lstset{style=mystyle}
 
 %Gummi|065|=)
@@ -75,7 +75,7 @@ Le programme fonctionne donc ainsi :
 
 \end{itemize}
 
-Le fonctionnement de cet algorithme pourrait ressembler au fonctionnement d'un programme contenant l'instruction "while(ebx != longueur) en C. Et comme déjà dit précédement ebx nous sert d'itérateur (et donc la condition d'arrêt dépent de lui). 
+Le fonctionnement de cet algorithme pourrait ressembler au fonctionnement d'un programme contenant l'instruction "while(ebx != longueur) en C. Et comme déjà dit précédement ebx nous sert d'itérateur (et donc la condition d'arrêt dépent de lui).
 
 
 \begin{figure}[ht]
@@ -86,9 +86,9 @@ Le fonctionnement de cet algorithme pourrait ressembler au fonctionnement d'un p
 
 \subsection{Chaîne de taille variable}
 
-On modifie maintenant le premier code en "hello2" dans lequel la variable longueure n'est plus utilisée, à la place on définie la variable msg comme la chaine de caractère "bonjour tout le monde", terminée par un 0. 
+On modifie maintenant le premier code en "hello2" dans lequel la variable longueure n'est plus utilisée, à la place on définie la variable msg comme la chaine de caractère "bonjour tout le monde", terminée par un 0.
 
-Nous avons donc modifié le programme pour qu'il affiche toujours correctement le contenu de msg. Pour cela on garde ebx qui nous sert toujours de variable permettant de parcourir chaque caractère du message à afficher. Mais la comparaison se fait entre eax et 0 en effet si eax est égal à 0 cela signifie qu'on est arrivé à la fin du message (cela est valable car la chaîne message ne contient pas de caractère 0). 
+Nous avons donc modifié le programme pour qu'il affiche toujours correctement le contenu de msg. Pour cela on garde ebx qui nous sert toujours de variable permettant de parcourir chaque caractère du message à afficher. Mais la comparaison se fait entre eax et 0 en effet si eax est égal à 0 cela signifie qu'on est arrivé à la fin du message (cela est valable car la chaîne message ne contient pas de caractère 0).
 
 L'algorithme implémenté correspond donc à un while(msg[ebx] != 0)
 
@@ -104,41 +104,274 @@ L'algorithme implémenté correspond donc à un while(msg[ebx] != 0)
 \subsection{Conversion d'un nombre non signé en base 10}
 
 
-Dans ce programme on cherche à convertir et afficher des nombres en différentes bases. 
-Pour cela on utiliser une chaine de caractère de taille n pour stocker la conversion de nombre. Sachant nombre exprimé en base 2 sur 32 bits. Sa valeur maximale serat donc FFFFFFFFh soit $2^{32}$. Nous souhaitons convertir le tout en base 10, on résout donc $2^{32}=10^n$. On obtient donc n=10
+Dans ce programme on cherche à convertir et afficher des nombres en différentes bases.
+Pour cela on utiliser une chaine de caractère de taille n pour stocker la conversion de nombre.
+Sachant nombre exprimé en base 2 sur 32 bits. Sa valeur maximale serat donc FFFFFFFFh soit $2^{32}$.
+\\ Nous souhaitons convertir le tout en base 10, on résout donc $2^{32}=10^n$.
+\\ $2^{32}=10^n$
+\\ $32*ln(2) = n*ln(10)$
+\\ $n=\frac{32*ln(2)}{ln(10)}$
+\\
+\\ $n=9.63295986125$
+\\
+\\ ${\lceil}n{\rceil}=10$
+\\
+\\ On aura donc besoin d'au plus 10 caractères pour afficher un nombre de 32bits en décimal.
 
-Pour convertir on utilisera la méthode des divisions successive qui fonctionne pour les entiers non signés. On divise donc successivement l'entier par la base de conversion, on stocke les restes et on divise le résultat jusqu'à ce qu'il soit plus petit que la base choisie. Les restes correspondent aux octets de poids de plus en plus faible.
+Pour convertir on utilisera la méthode des divisions successive qui fonctionne pour les entiers non signés.
+On divise donc successivement l'entier par la base de conversion,
+on stocke les restes et on divise le résultat jusqu'à ce que le resultat de la division soit égale a 0.
 
-METTRE LE CODE
+\begin{lstlisting}
+title conversion.asm
 
-REPONDRE A Q3
+.686
+.model 		flat, c
+
+extern      putchar:near
+extern      getchar:near
+
+.data
+
+nombre      dd      95c8ah          ; Nombre a convertir
+chaine      db      10 dup(?)       ; longueur maximale n de la chaine
+
+.code
+
+; Sous-programme main, automatiquement appele par le code de
+; demarrage 'C'
+public      main
+main        proc
+			push 	eax							; sauvegarde des registres
+			push  ebx             ; Sauvegarde pour le code 'C'
+
+			xor		ebx, ebx
+			xor		eax, eax
+			mov		ecx, 10         ;base dans laquelle on souhaite convertir la variable nombre
+			mov		eax, [nombre]
+
+suivant :		xor 	edx, edx
+			div	ecx                ; on divise eax (nombre) par ecx (ici 10)
+			mov		[chaine+ebx], dl ; le reste est placé dans le registre edx (le reste sera toujours inferieur a 32 donc il occupera donc toujours au plus les 4 premiers bits de dl) chaque case de chaine étant de 1 octet on copie le registre dl (de 1 octet aussi) dans notre case mémoire de chaine
+      inc		ebx              ; on incrémente ebx pour qu'a la prochaine occurence, dl soit placé dans la case mémoire suivante
+			cmp		eax, 0           ; si le resultat de la division (registre eax) est 0 alors la conversion est terminé sinon on continue
+			jne		suivant
+
+			call    getchar         ; Attente de l'appui sur "Entree"
+			pop     ebx
+      ret                     ; Retour au code de demarrage 'C'
+
+main       endp
+
+end
+
+
+\end{lstlisting}
+
+La chaine contient les chiffres brut. Mais putchar affiche les caracteres avec la table ASCII.
+\\Le caractere 0 ne correspond pas au chiffre 0 dans la table ASCII. On ajoute donc "O" (soit le numero du caractere "0" dans la table ASCII) a nos chiffres pour les faire correspondre aux bon caractere et donc les afficher correctement.
 
 \subsection{Affichage du nombre}
 
-METTRE LE RESULTAT DE L'AFFICHAGE
+\begin{lstlisting}
+; Sous-programme main, automatiquement appele par le code de
+; demarrage 'C'
+public      main
+main        proc
+			push 	eax							; sauvegarde des registres
+			push  ebx             ; Sauvegarde pour le code 'C'
+
+			xor		ebx, ebx
+			xor		eax, eax
+			mov		ecx, 10
+			mov		eax, [nombre]
+
+suivant :		xor 	edx, edx
+			div	ecx
+			mov		[chaine+ebx], dl
+      inc		ebx
+			cmp		eax, 0
+			jne		suivant
+			dec		ebx             ; on reprend le programme précédent et on decremente ebx pour avoir le bon nombre de chiffres de notre nombre converti.
+
+
+affichage : movzx   eax, byte ptr[ebx + chaine] on met dans le registre eax un cara caractere de chaine a chaque iteration. On commence par la fin (ici ebx est égale l'index du dernier caractere de chaine)
+
+			add			eax, "0"        ; on joute le numero du caractere '0' a notre chiffre pour l'afficher correctement
+      push   	eax         		; on push le caractere a afficher
+      call    putchar     		; Appel de putchar
+      add     esp, 4      		; Nettoyage de la pile apres appel
+  		dec     ebx             ; Caractere precedent
+	    cmp     ebx, 10 				; on compare ebx a 10. Quand ebx est égale a 0 on est au debut de la chaine on a donc affiche le dernier caractere.
+      jb     	affichage       ; si on decremente encore ebx sera égale a FFFFFFFFh. Le nombre maximum que peut contenir ebx est le nombre maximum de caractere (ici 10, si il est superieur a 10 c'est qu'il est égale a FFFFFFFFh)
+			call    getchar         ; Attente de l'appui sur "Entree"
+			pop     ebx
+      ret                     ; Retour au code de demarrage 'C'
+
+main       endp
+
+end
+
+
+\end{lstlisting}
 
 
 \subsection{Affichage du signe}
 
-La méthode actuellement implémentée ne fonctionne pas pour les nombres négatifs. Pour qu'elle fonctionne nous devons d'abord réaliser un test permettant de déterminer si le nombre est négatif ou non. Si il l'est, il faudra donc prendre son opposé, lancer le programme déjà conçu précédement et afficher un "-" devant le résultat. 
+La méthode actuellement implémentée ne fonctionne pas pour les nombres négatifs.
+Pour qu'elle fonctionne nous devons d'abord réaliser un test permettant de
+déterminer si le nombre est négatif ou non.
+Si il l'est,on affiche le caractere "-", on prendre son opposé
+et on lance le programme déjà conçu précédement
+
+\begin{lstlisting}
+.data
+
+nombre      dd      -95c8ah          ; Nombre a convertir
+chaine      db      32 dup(?)       ; Remplacer xx par la longueur maximale n de la chaine
+
+.code
+
+; Sous-programme main, automatiquement appele par le code de
+; demarrage 'C'
+public      main
+main        proc
+			push 	eax				      ; sauvegarde des registres
+			push  ebx             ; Sauvegarde pour le code 'C'
+
+			xor		ebx, ebx
+			xor		eax, eax
+			mov		ecx, 35
+			mov		eax, [nombre]
+			cmp 	eax, 0        ;on compare le nombre a 0
+			jge 	suivant       ;si il est positif ou nul on ne fait rien et on passe a la conversetion directement
+			dec 	eax           ;si le nombre est negatif on le converti en son oppose en decrementant 1
+			not 	eax           ;et avec l'operation not
+			push 	eax				    ;sauvegarde des registres eax et ecx avant l'appel de putchar
+			push	ecx
+			push  "-"           ; on affiche le - car le nombre est negatif
+      call    putchar     ; Appel de putchar
+      add     esp, 4      ; Nettoyage de la pile apres appel
+			pop ecx             ; on recupere les registres eax et ebx sauvegardé dans la pile
+			pop eax
+
+suivant :		xor 	edx, edx
+			div	ecx
+			mov		[chaine+ebx], dl
+      inc		ebx
+			cmp		eax, 0
+			jne		suivant
+			dec		ebx
 
 
-METTRE LE CODE
+affichage : movzx   eax, byte ptr[ebx + chaine]
 
+			add			eax, "0"
+      push   	eax         		; Caractere a afficher
+      call    putchar     		; Appel de putchar
+      add     esp, 4      		; Nettoyage de la pile apres appel
+  		dec     ebx             ; Caractere suivant
+	    cmp     ebx, 10 				; Toute la longueur ?
+      jb     	affichage       ; si non, passer au suivant
+			call    getchar         ; Attente de l'appui sur "Entree"
+			pop     ebx
+      ret                     ; Retour au code de demarrage 'C'
+
+main       endp
+
+end
+\end{lstlisting}
 \subsection{Base quelconque entre 2 et 36}
 
 
-On veut donc pouvoir convertir un nombre dans n'importe quelle base entre 2 et 36, pour cela il suffit de réaliser la division par cette base. De plus on n'utilisera pas la table ASCI mais une chaîne de caractères composée des caractères allant de 0 à 9 puis de A à Z. Cette chaîne contient donc tous les digit possibles pour écrire des nombes allant de la base 2 à la base 36. Pour déterminer quel caractère il faut afficher on utilisera un pointeur sue cette chaine de caractère qui se déplacera en fonction du résultat de la division. 
+On veut donc pouvoir convertir un nombre dans n'importe quelle base entre 2 et 36,
+pour cela il suffit de réaliser la division par cette base.
+De plus on n'utilisera pas la table ASCI mais une chaîne de caractères composée des caractères allant de 0 à 9 puis de A à Z.
+Cette chaîne contient donc tous les digit possibles pour écrire des nombes allant de la base 2 à la base 36.
+Pour déterminer quel caractère il faut afficher on utilisera un pointeur
+sur cette chaine de caractère qui se déplacera en fonction du résultat de la division.
 
 
-On aura besoin au maximum d'afficher 32 caractères, la chaîne doit donc avoir pour longueur 32 octets. 
+On aura besoin au maximum d'afficher 32 caractères, la chaîne doit donc avoir pour longueur 32 octets.
 
-METTRE LE CODE
 
+\begin{lstlisting}
+; conversion.asm
+;
+; MI01 - TP Assembleur 1
+;
+; Affiche un nombre de 32 bits sous forme lisible
+
+title conversion.asm
+
+.686
+.model 		flat, c
+
+extern      putchar:near
+extern      getchar:near
+
+.data
+
+nombre      dd      95c8ah          ; Nombre a convertir
+chaine      db      32 dup(?)       ; Remplacer xx par la longueur maximale n de la chaine
+chiffres 		db 			"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+.code
+
+; Sous-programme main, automatiquement appele par le code de
+; demarrage 'C'
+public      main
+main        proc
+			push 	eax				; sauvegarde des registres
+			push  ebx             ; Sauvegarde pour le code 'C'
+
+			xor		ebx, ebx
+			xor		eax, eax
+			mov		ecx, 35
+			mov		eax, [nombre]
+			cmp 	eax, 0
+			jge 	suivant
+			dec 	eax
+			not 	eax
+			push 	eax				    ; sauvegarde des registres
+			push	ecx
+			push  "-"           ; on affiche le - si le nombre est negatif
+      call    putchar     ; Appel de putchar
+      add     esp, 4      ; Nettoyage de la pile apres appel
+			pop ecx
+			pop eax
+
+suivant :		xor 	edx, edx
+			div	ecx
+			mov		[chaine+ebx], dl
+      inc		ebx
+			cmp		eax, 0
+			jne		suivant
+			dec		ebx
+
+
+affichage : movzx   eax, byte ptr[ebx + chaine]
+
+			lea			edx, [chiffres + eax]
+      push   	[edx]         	; Caractere a afficher
+      call    putchar     		; Appel de putchar
+      add     esp, 4      		; Nettoyage de la pile apres appel
+  		dec     ebx             ; Caractere suivant
+	    cmp     ebx,32 					; Toute la longueur ?
+      jb     	affichage       ; si non, passer au suivant
+			call    getchar         ; Attente de l'appui sur "Entree"
+			pop     ebx
+      ret                     ; Retour au code de demarrage 'C'
+
+main       endp
+
+end
+
+\end{lstlisting}
 
 
 \medskip
 
-En base 35,  95c8ah est égale à 480724667
+En base 35,  95c8ah est égale à EASY
 
 \end{document}
