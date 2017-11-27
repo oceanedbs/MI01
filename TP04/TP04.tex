@@ -28,16 +28,31 @@
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
     breakatwhitespace=false,
+    commentstyle=\color{codegreen},   
     breaklines=true,
     captionpos=b,
     keepspaces=true,
+    keywordsprefix= ; ,
     numbers=left,
     numbersep=5pt,
     showspaces=false,
     showstringspaces=false,
     showtabs=false,
-    tabsize=2
-}
+    tabsize=2,
+     morekeywords={mov, push, xor, extern, div, mov, inc, cmp, jne, call, pop, ret,endp, proc, end, dec, add, jb, dd, db, jge  not, lea, main, public, movzx,ABCD,ADD,%
+ADDA,ADDI,ADDQ,ADDX,AND,ANDI,ASL,ASR,BCC,BLS,BCS,BLT,BEQ,BMI,BF,BNE,BGE,BPL,%
+BGT,BT,BHI,BVC,BLE,BVS,BCHG,BCLR,BRA,BSET,BSR,BTST,CHK,CLR,CMP,CMPA,CMPI,CMPM,%
+DBCC,DBLS,DBCS,DBLT,DBEQ,DBMI,DBF,DBNE,DBGE,DBPL,DBGT,DBT,DBHI,DBVC,DBLE,DBVS,DIVS,%
+DIVU,EOR,EORI,EXG,EXT,ILLEGAL,JMP,JSR,LEA,LINK,LSL,LSR,MOVE,MOVEA,MOVEM,MOVEP,MOVEQ,%
+MULS,MULU,NBCD,NEG,NEGX,NOP,NOT,OR,ORI,PEA,RESET,ROL,ROR,ROXL,ROXR,RTE,RTR,RTS,SBCD,%
+SCC,SLS,SCS,SLT,SEQ,SMI,SF,SNE,SGE,SPL,SGT,ST,SHI,SVC,SLE,SVS,STOP,SUB,SUBA,SUBI,SUBQ,%
+SUBX,SWAP,TAS,TRAP,TRAPV,TST,UNLK},
+    extendedchars=true,
+     sensitive=false,
+   morecomment=[l]*,
+   morecomment=[l]; ,
+    literate= {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1 {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1,
+  }
 
 \lstset{style=mystyle}
 
@@ -61,7 +76,8 @@ La variable longueure est définie comme un data double word (il occupe ainsi to
 
 Le programme fonctionne donc ainsi :
 \begin{itemize}
-\item L
+\item La fonction main (seule fonction du programme), commence par réaliser une sauvegarde pour le code 'C' grâce à push ebx (le contenu de ebx est mis sur le sommet de la pile) 
+
 \item puis le registre ebx est mis à 0
 \item puis on définie la ligne de programme qui suit avec l'étiquette "suivant". Cet ligne permet de mettre dans eax le contenu de l'adresse pointée par la somme de ebx et l'adresse de message. Le reste du registre sera completé par des zéros. Ebx va ici nous servir de controleur pour le nombre d'itération effectuées.
 \item puis on met sur la pile le caratère à afficher et on appel la fonction c "putchar" qui elle-meme appelle fputchar qui permet d'afficher le caractère qui à été mis sur la pile.
@@ -168,7 +184,7 @@ end
 
 \end{lstlisting}
 
-La chaine contient les chiffres brut. Mais putchar affiche les caracteres avec la table ASCII.
+La chaine contient les chiffres brut. Mais putchar affiche les caractères avec la table ASCII.
 \\Le caractere 0 ne correspond pas au chiffre 0 dans la table ASCII. On ajoute donc "O" (soit le numero du caractere "0" dans la table ASCII) a nos chiffres pour les faire correspondre aux bon caractere et donc les afficher correctement.
 
 \subsection{Affichage du nombre}
@@ -197,8 +213,8 @@ suivant :		xor 	edx, edx
 
 affichage : movzx   eax, byte ptr[ebx + chaine] on met dans le registre eax un cara caractere de chaine a chaque iteration. On commence par la fin (ici ebx est égale l'index du dernier caractere de chaine)
 
-			add			eax, "0"        ; on joute le numero du caractere '0' a notre chiffre pour l'afficher correctement
-      push   	eax         		; on push le caractere a afficher
+			add			eax, "0"        ; on ajoute le numero du caractere '0' a notre chiffre pour l'afficher correctement
+      push   	eax         		; on ajoute sur la pile le caractere a afficher
       call    putchar     		; Appel de putchar
       add     esp, 4      		; Nettoyage de la pile apres appel
   		dec     ebx             ; Caractere precedent
