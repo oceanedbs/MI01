@@ -28,7 +28,7 @@
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
     breakatwhitespace=false,
-    commentstyle=\color{codegreen},   
+    commentstyle=\color{codegreen},
     breaklines=true,
     captionpos=b,
     keepspaces=true,
@@ -68,7 +68,7 @@ La variable longueure est définie comme un data double word (il occupe ainsi to
 
 Le programme fonctionne donc ainsi :
 \begin{itemize}
-\item La fonction main (seule fonction du programme), commence par réaliser une sauvegarde pour le code 'C' grâce à push ebx (le contenu de ebx est mis sur le sommet de la pile) 
+\item La fonction main (seule fonction du programme), commence par réaliser une sauvegarde pour le code 'C' grâce à push ebx (le contenu de ebx est mis sur le sommet de la pile)
 
 \item puis le registre ebx est mis à 0
 \item puis on définie la ligne de programme qui suit avec l'étiquette "suivant". Cet ligne permet de mettre dans eax le contenu de l'adresse pointée par la somme de ebx et l'adresse de message. Le reste du registre sera completé par des zéros. Ebx va ici nous servir de controleur pour le nombre d'itération effectuées.
@@ -180,6 +180,17 @@ end
 La chaine contient les chiffres brut. Mais putchar affiche les caractères avec la table ASCII.
 \\Le caractere 0 ne correspond pas au chiffre 0 dans la table ASCII. On ajoute donc "O" (soit le numero du caractere "0" dans la table ASCII) a nos chiffres pour les faire correspondre aux bon caractere et donc les afficher correctement.
 
+\begin{figure}[ht]
+\includegraphics[width=12cm]{capture9.PNG}
+\caption{Etat de la mémoire après la première iteration}
+\end{figure}
+
+\begin{figure}[ht]
+\includegraphics[width=12cm]{capture10.PNG}
+\caption{Etat de la mémoire a la fin de l'itération}
+\end{figure}
+
+\newpage
 \subsection{Affichage du nombre}
 
 \begin{lstlisting}
@@ -187,7 +198,7 @@ La chaine contient les chiffres brut. Mais putchar affiche les caractères avec 
 ; demarrage 'C'
 public      main
 main        proc
-			push 	eax							; sauvegarde des registres
+
 			push  ebx             ; Sauvegarde pour le code 'C'
 
 			xor		ebx, ebx
@@ -195,7 +206,7 @@ main        proc
 			mov		ecx, 10
 			mov		eax, [nombre]
 
-suivant :		
+suivant :
       xor 	edx, edx
 			div	    ecx
 			mov		[chaine+ebx], dl
@@ -205,7 +216,7 @@ suivant :
 			dec		ebx     ; on reprend le programme précédent et on decremente ebx pour avoir le bon nombre de chiffres de notre nombre converti.
 
 
-affichage : 
+affichage :
 
       movzx   eax, byte ptr[ebx + chaine]  ; on met dans le registre eax un cara caractere de chaine a chaque iteration. On commence par la fin (ici ebx est égale l'index du dernier caractere de chaine)
 
@@ -225,8 +236,14 @@ main       endp
 end
 
 
+
+
 \end{lstlisting}
 
+\begin{figure}[ht]
+\includegraphics[width=12cm]{capture10.PNG}
+\caption{Execution de la conversion}
+\end{figure}
 
 \subsection{Affichage du signe}
 
@@ -248,12 +265,12 @@ chaine      db      32 dup(?)       ; Remplacer xx par la longueur maximale n de
 ; demarrage 'C'
 public      main
 main        proc
-			push 	eax				      ; sauvegarde des registres
+
 			push  ebx             ; Sauvegarde pour le code 'C'
 
 			xor		ebx, ebx
 			xor		eax, eax
-			mov		ecx, 35
+			mov		ecx, 10
 			mov		eax, [nombre]
 			cmp 	eax, 0        ;on compare le nombre a 0
 			jge 	suivant       ;si il est positif ou nul on ne fait rien et on passe a la conversetion directement
@@ -262,22 +279,22 @@ main        proc
 			push 	eax				    ;sauvegarde des registres eax et ecx avant l'appel de putchar
 			push	ecx
 			push  "-"           ; on affiche le - car le nombre est negatif
-      call    putchar     ; Appel de putchar
-      add     esp, 4      ; Nettoyage de la pile apres appel
+			call    putchar     ; Appel de putchar
+			add     esp, 4      ; Nettoyage de la pile apres appel
 			pop ecx             ; on recupere les registres eax et ebx sauvegardé dans la pile
 			pop eax
 
 suivant :
-      xor 	edx, edx
+			xor 	edx, edx
 			div	ecx
 			mov		[chaine+ebx], dl
-      inc		ebx
+			inc		ebx
 			cmp		eax, 0
 			jne		suivant
 			dec		ebx
 
 
-affichage : 
+affichage :
       movzx   eax, byte ptr[ebx + chaine]
 	    add			eax, "0"
       push   	eax         		; Caractere a afficher
@@ -294,6 +311,12 @@ main       endp
 
 end
 \end{lstlisting}
+
+\begin{figure}[ht]
+\includegraphics[width=12cm]{capture7.PNG}
+\caption{Execution avec -95c8ah}
+\end{figure}
+
 \subsection{Base quelconque entre 2 et 36}
 
 
@@ -335,7 +358,6 @@ chiffres 		db 			"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ; demarrage 'C'
 public      main
 main        proc
-			push 	eax				; sauvegarde des registres
 			push  ebx             ; Sauvegarde pour le code 'C'
 
 			xor		ebx, ebx
@@ -355,7 +377,7 @@ main        proc
 			pop eax
 
 suivant :		xor 	edx, edx
-			div	ecx
+			div	  ecx
 			mov		[chaine+ebx], dl
       inc		ebx
 			cmp		eax, 0
@@ -386,5 +408,10 @@ end
 \medskip
 
 En base 35,  95c8ah est égale à EASY
+
+\begin{figure}[ht]
+\includegraphics[width=12cm]{capture6.PNG}
+\caption{Resultat final}
+\end{figure}
 
 \end{document}
