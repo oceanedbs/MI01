@@ -1,0 +1,1850 @@
+version: 0.10.0
+filePath: TP04.tex
+options:
+  $BIBINPUTS:
+    - $ROOTDIR
+    - $ROOTDIR/$OUTDIR
+    - ''
+  $TEXINPUTS:
+    - $ROOTDIR
+    - $ROOTDIR/$OUTDIR
+    - ''
+  bibtexEngine: bibtex
+  cleanPatterns: &ref_0
+    - '**/*.aux'
+    - '**/*.aux.bak'
+    - '**/*.bbl'
+    - '**/*.bcf'
+    - '**/*.blg'
+    - '**/*.dvi'
+    - '**/*.fdb_latexmk'
+    - '**/*.fls'
+    - '**/*.idx'
+    - '**/*.idx.bak'
+    - '**/*.ilg'
+    - '**/*.ind'
+    - '**/*.lof'
+    - '**/*.log'
+    - '**/*.lol'
+    - '**/*.lot'
+    - '**/*.nav'
+    - '**/*.out'
+    - '**/*.pdf'
+    - '**/*.ps'
+    - '**/*.snm'
+    - '**/*.synctex.gz'
+    - '**/*.toc'
+    - '/**/_minted-${JOB}'
+    - '/${OUTDIR}/sage-plots-for-${JOB}.tex'
+    - /missfont.log
+    - /texput.log
+    - /texput.aux
+  dviToPdfEngine: xdvipdfmx
+  engine: pdflatex
+  epstopdfBoundingBox: default
+  epstopdfOutputPath: $DIR_0/$NAME_0.pdf
+  indexAutomaticRanges: true
+  indexEngine: makeindex
+  indexOrdering: word
+  indexSorting: default
+  knitrConcordance: true
+  knitrOutputPath: $JOB.tex
+  lhs2texStyle: poly
+  literateAgdaEngine: agda
+  literateHaskellEngine: lhs2TeX
+  loadCache: true
+  loadUserOptions: true
+  outputFormat: pdf
+  phaseCycles: 20
+  pweaveCacheDirectory: pweave-cache-for-$JOB
+  pweaveFigureDirectory: pweave-figures-for-$JOB
+  pweaveKernel: python3
+  pweaveOutputFormat: tex
+  pweaveOutputPath: $JOB.tex
+  saveCache: true
+  severity: info
+  synctex: true
+  copyTargetsToRoot: true
+  outputDirectory: ''
+  intermediatePostScript: false
+  $PATH: '/usr/texbin:/Library/TeX/texbin:$PATH'
+files:
+  dicy-instance.yaml-ParsedYAML:
+    timeStamp: 2017-11-26T15:54:30.539Z
+    value:
+      severity: info
+    jobNames: []
+    type: ParsedYAML
+  dicy.yaml-ParsedYAML:
+    jobNames: []
+    type: ParsedYAML
+  TP04.yaml-ParsedYAML:
+    jobNames: []
+    type: ParsedYAML
+  TP04.tex-ParsedLaTeXMagic:
+    timeStamp: 2017-11-26T15:54:30.615Z
+    value: {}
+    jobNames: []
+    type: ParsedLaTeXMagic
+  /Users/geoffreyperrin/.dicy.yaml-ParsedYAML:
+    timeStamp: 2017-11-26T15:54:30.612Z
+    value:
+      engine: pdflatex
+      synctex: true
+      severity: warning
+      copyTargetsToRoot: true
+      outputDirectory: ''
+      outputFormat: pdf
+      cleanPatterns: *ref_0
+      intermediatePostScript: false
+      $PATH: '/usr/texbin:/Library/TeX/texbin:$PATH'
+    jobNames: []
+    type: ParsedYAML
+  TP04.tex:
+    timeStamp: 2017-11-26T20:07:14.724Z
+    hash: FT1pDQe3S4R4IeU9wdShaM/1M+QHM3426Mo8RGrC8rc=
+    jobNames: []
+    type: LaTeX
+    subType: report
+  /Users/geoffreyperrin/.dicy.yaml:
+    timeStamp: 2017-11-26T15:54:30.577Z
+    jobNames: []
+    type: YAML
+  x.y-Nil:
+    jobNames: []
+    type: Nil
+  TP04.fls-ParsedFileListing:
+    timeStamp: 2017-11-26T16:43:10.470Z
+    value:
+      messages: []
+      inputs:
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc
+        - /usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1728.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm0600.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm0900.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1095.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1200.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1440.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1728.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr6.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
+        - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb
+        - >-
+          /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb
+        - /usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+        - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+        - >-
+          /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/fontenc.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/omsenc.dfu
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/ot1enc.dfu
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/report.cls
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/size11.clo
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.def
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.dfu
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/color.cfg
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/color.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphics.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphicx.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/keyval.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/trig.sty
+        - >-
+          /usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.cfg
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/listings/lstmisc.sty
+        - >-
+          /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grfext.sty
+        - /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+        - /usr/local/texlive/2017/texmf-dist/web2c/texmf.cnf
+        - /usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+        - /usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt
+        - /usr/local/texlive/2017/texmf.cnf
+        - Capture4.PNG
+        - Capture5.PNG
+        - TP04.aux
+        - TP04.tex
+      outputs:
+        - TP04.aux
+        - TP04.log
+        - TP04.pdf
+      calls: []
+    jobNames: []
+    type: ParsedFileListing
+  TP04.log-ParsedLaTeXLog:
+    timeStamp: 2017-11-26T17:53:45.661Z
+    value:
+      messages:
+        - name: pdfTeX
+          severity: info
+          text: inputenc 2015/03/17 v1.2c Input encoding file
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 28
+              end: 28
+        - name: pdfTeX
+          severity: info
+          text: fontenc 2017/04/05 v2.0i Standard LaTeX package
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 341
+              end: 341
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Redeclaring font encoding T1
+          source:
+            file: TP04.tex
+            range:
+              start: 48
+              end: 48
+          log:
+            file: TP04.log
+            range:
+              start: 344
+              end: 344
+        - name: pdfTeX
+          severity: info
+          text: keyval 2014/10/28 v1.15 key=value parser (DPC)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 347
+              end: 347
+        - name: pdfTeX
+          severity: info
+          text: listings 2015/06/04 1.6 (Carsten Heinz)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 370
+              end: 370
+        - name: pdfTeX
+          severity: info
+          text: >-
+            fancyhdr 2017/06/30 v3.9a Extensive control of page headers and
+            footers
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 372
+              end: 373
+        - name: pdfTeX
+          severity: info
+          text: 'graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)'
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 384
+              end: 384
+        - name: pdfTeX
+          severity: info
+          text: 'graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)'
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 386
+              end: 386
+        - name: pdfTeX
+          severity: info
+          text: trig 2016/01/03 v1.10 sin cos tan (DPC)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 388
+              end: 388
+        - severity: info
+          name: pdfTeX
+          category: Package graphics
+          text: 'Driver file: pdftex.def'
+          source:
+            file: TP04.tex
+            range:
+              start: 99
+              end: 99
+          log:
+            file: TP04.log
+            range:
+              start: 392
+              end: 392
+        - name: pdfTeX
+          severity: info
+          text: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 399
+              end: 399
+        - severity: info
+          name: pdfTeX
+          category: Package color
+          text: 'Driver file: pdftex.def'
+          source:
+            file: TP04.tex
+            range:
+              start: 147
+              end: 147
+          log:
+            file: TP04.log
+            range:
+              start: 403
+              end: 403
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OML/cmm/m/it
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 407
+              end: 407
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: ... okay
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 408
+              end: 408
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for T1/cmr/m/n
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 409
+              end: 409
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: ... okay
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 410
+              end: 410
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OT1/cmr/m/n
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 411
+              end: 411
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: ... okay
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 412
+              end: 412
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OMS/cmsy/m/n
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 413
+              end: 413
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: ... okay
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 414
+              end: 414
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for OMX/cmex/m/n
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 415
+              end: 415
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: ... okay
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 416
+              end: 416
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Checking defaults for U/cmr/m/n
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 417
+              end: 417
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: ... okay
+          source:
+            file: TP04.tex
+            range:
+              start: 49
+              end: 49
+          log:
+            file: TP04.log
+            range:
+              start: 418
+              end: 418
+        - name: pdfTeX
+          severity: info
+          text: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 434
+              end: 434
+        - name: pdfTeX
+          severity: info
+          text: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 436
+              end: 436
+        - name: pdfTeX
+          severity: info
+          text: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 438
+              end: 438
+        - name: pdfTeX
+          severity: info
+          text: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 440
+              end: 440
+        - name: pdfTeX
+          severity: info
+          text: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 442
+              end: 442
+        - name: pdfTeX
+          severity: info
+          text: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 444
+              end: 444
+        - name: pdfTeX
+          severity: info
+          text: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 446
+              end: 446
+        - name: pdfTeX
+          severity: info
+          text: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 448
+              end: 448
+        - name: pdfTeX
+          severity: info
+          text: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 450
+              end: 450
+        - severity: info
+          name: pdfTeX
+          category: Package ifluatex
+          text: LuaTeX not detected.
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 451
+              end: 451
+        - severity: info
+          name: pdfTeX
+          category: Package etexcmds
+          text: >-
+            Could not find \expanded. That can mean that you are not using
+            pdfTeX 1.50 or that some package has redefined \expanded. In the
+            latter case, load this package earlier.
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 453
+              end: 456
+        - name: pdfTeX
+          severity: info
+          text: >-
+            pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX
+            (HO)
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 458
+              end: 459
+        - name: pdfTeX
+          severity: info
+          text: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 461
+              end: 461
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: LuaTeX not detected.
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 463
+              end: 463
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: \pdf@primitive is available.
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 464
+              end: 464
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: \pdf@ifprimitive is available.
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 465
+              end: 465
+        - severity: info
+          name: pdfTeX
+          category: Package pdftexcmds
+          text: \pdfdraftmode found.
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 466
+              end: 466
+        - severity: info
+          name: pdfTeX
+          category: Package epstopdf-base
+          text: Redefining graphics rule for `.eps'
+          source:
+            file: TP04.tex
+            range:
+              start: 438
+              end: 438
+          log:
+            file: TP04.log
+            range:
+              start: 468
+              end: 469
+        - severity: info
+          name: pdfTeX
+          category: Package grfext
+          text: >-
+            Graphics extension search list:
+            [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
+            \AppendGraphicsExtensions.
+          source:
+            file: TP04.tex
+            range:
+              start: 456
+              end: 456
+          log:
+            file: TP04.log
+            range:
+              start: 470
+              end: 473
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: External font `cmex10' loaded for size <12>.
+          source:
+            file: TP04.tex
+            range:
+              start: 51
+              end: 51
+          log:
+            file: TP04.log
+            range:
+              start: 478
+              end: 479
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: External font `cmex10' loaded for size <8>.
+          source:
+            file: TP04.tex
+            range:
+              start: 51
+              end: 51
+          log:
+            file: TP04.log
+            range:
+              start: 480
+              end: 481
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: External font `cmex10' loaded for size <6>.
+          source:
+            file: TP04.tex
+            range:
+              start: 51
+              end: 51
+          log:
+            file: TP04.log
+            range:
+              start: 482
+              end: 483
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: Try loading font information for OMS+cmr
+          source:
+            file: TP04.tex
+            range:
+              start: 64
+              end: 64
+          log:
+            file: TP04.log
+            range:
+              start: 487
+              end: 487
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: >-
+            Font shape `OMS/cmr/m/n' in size <10.95> not available Font shape
+            `OMS/cmsy/m/n' tried instead.
+          source:
+            file: TP04.tex
+            range:
+              start: 64
+              end: 64
+          log:
+            file: TP04.log
+            range:
+              start: 491
+              end: 492
+        - severity: warning
+          name: pdfTeX
+          category: Package Fancyhdr
+          text: '\headheight is too small (12.0pt):'
+          source:
+            file: TP04.tex
+          log:
+            file: TP04.log
+            range:
+              start: 494
+              end: 494
+        - severity: info
+          name: pdfTeX
+          category: Package pdftex.def
+          text: Capture5.PNG used on input line 82.
+          source:
+            file: TP04.tex
+            range:
+              start: 82
+              end: 82
+          log:
+            file: TP04.log
+            range:
+              start: 503
+              end: 503
+        - severity: info
+          name: pdfTeX
+          category: Package pdftex.def
+          text: 'Requested size: 227.62204pt x 311.35133pt'
+          source:
+            file: TP04.tex
+            range:
+              start: 82
+              end: 82
+          log:
+            file: TP04.log
+            range:
+              start: 505
+              end: 506
+        - severity: info
+          name: pdfTeX
+          category: Package pdftex.def
+          text: Capture4.PNG used on input line 98.
+          source:
+            file: TP04.tex
+            range:
+              start: 98
+              end: 98
+          log:
+            file: TP04.log
+            range:
+              start: 511
+              end: 511
+        - severity: info
+          name: pdfTeX
+          category: Package pdftex.def
+          text: 'Requested size: 312.9803pt x 235.02597pt'
+          source:
+            file: TP04.tex
+            range:
+              start: 98
+              end: 98
+          log:
+            file: TP04.log
+            range:
+              start: 513
+              end: 514
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: External font `cmex10' loaded for size <10.95>.
+          source:
+            file: TP04.tex
+            range:
+              start: 109
+              end: 109
+          log:
+            file: TP04.log
+            range:
+              start: 515
+              end: 516
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: External font `cmex10' loaded for size <9>.
+          source:
+            file: TP04.tex
+            range:
+              start: 141
+              end: 141
+          log:
+            file: TP04.log
+            range:
+              start: 533
+              end: 534
+        - severity: info
+          name: pdfTeX
+          category: LaTeX Font
+          text: External font `cmex10' loaded for size <5>.
+          source:
+            file: TP04.tex
+            range:
+              start: 141
+              end: 141
+          log:
+            file: TP04.log
+            range:
+              start: 535
+              end: 536
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 538
+              end: 540
+          source:
+            file: TP04.tex
+            range:
+              start: 155
+              end: 155
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 554
+              end: 556
+          source:
+            file: TP04.tex
+            range:
+              start: 155
+              end: 155
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\lst@FillFixed@ (U+5A9) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 569
+              end: 571
+          source:
+            file: TP04.tex
+            range:
+              start: 155
+              end: 155
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 585
+              end: 587
+          source:
+            file: TP04.tex
+            range:
+              start: 155
+              end: 155
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 600
+              end: 602
+          source:
+            file: TP04.tex
+            range:
+              start: 155
+              end: 155
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 615
+              end: 617
+          source:
+            file: TP04.tex
+            range:
+              start: 155
+              end: 155
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 630
+              end: 632
+          source:
+            file: TP04.tex
+            range:
+              start: 156
+              end: 156
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 646
+              end: 648
+          source:
+            file: TP04.tex
+            range:
+              start: 156
+              end: 156
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 661
+              end: 663
+          source:
+            file: TP04.tex
+            range:
+              start: 156
+              end: 156
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 677
+              end: 679
+          source:
+            file: TP04.tex
+            range:
+              start: 156
+              end: 156
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 692
+              end: 694
+          source:
+            file: TP04.tex
+            range:
+              start: 156
+              end: 156
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 707
+              end: 709
+          source:
+            file: TP04.tex
+            range:
+              start: 156
+              end: 156
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 721
+              end: 723
+          source:
+            file: TP04.tex
+            range:
+              start: 157
+              end: 157
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 736
+              end: 738
+          source:
+            file: TP04.tex
+            range:
+              start: 157
+              end: 157
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 750
+              end: 752
+          source:
+            file: TP04.tex
+            range:
+              start: 195
+              end: 195
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 766
+              end: 768
+          source:
+            file: TP04.tex
+            range:
+              start: 195
+              end: 195
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 781
+              end: 783
+          source:
+            file: TP04.tex
+            range:
+              start: 195
+              end: 195
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 797
+              end: 799
+          source:
+            file: TP04.tex
+            range:
+              start: 195
+              end: 195
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\lst@FillFixed@ (U+5A9) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 813
+              end: 815
+          source:
+            file: TP04.tex
+            range:
+              start: 198
+              end: 198
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 829
+              end: 831
+          source:
+            file: TP04.tex
+            range:
+              start: 198
+              end: 198
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\lst@FillFixed@ (U+5A9) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 844
+              end: 846
+          source:
+            file: TP04.tex
+            range:
+              start: 205
+              end: 205
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 860
+              end: 862
+          source:
+            file: TP04.tex
+            range:
+              start: 205
+              end: 205
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\lst@FillFixed@ (U+5A9) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 875
+              end: 877
+          source:
+            file: TP04.tex
+            range:
+              start: 206
+              end: 206
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 891
+              end: 893
+          source:
+            file: TP04.tex
+            range:
+              start: 206
+              end: 206
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\lst@FillFixed@ (U+5A9) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 906
+              end: 908
+          source:
+            file: TP04.tex
+            range:
+              start: 206
+              end: 206
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 921
+              end: 923
+          source:
+            file: TP04.tex
+            range:
+              start: 206
+              end: 206
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Unicode char �\expandafter (U+4F1) not set up for use with LaTeX.
+          log:
+            file: TP04.log
+            range:
+              start: 936
+              end: 938
+          source:
+            file: TP04.tex
+            range:
+              start: 255
+              end: 255
+          category: Package inputenc
+        - severity: error
+          name: pdfTeX
+          text: Keyboard character used is undefined in inputencoding `utf8'.
+          log:
+            file: TP04.log
+            range:
+              start: 951
+              end: 953
+          source:
+            file: TP04.tex
+            range:
+              start: 255
+              end: 255
+          category: Package inputenc
+      inputs: []
+      outputs:
+        - TP04.pdf
+      calls: []
+    jobNames: []
+    type: ParsedLaTeXLog
+  TP04.aux-ParsedLaTeXAuxilary:
+    timeStamp: 2017-11-26T16:19:03.287Z
+    value:
+      commands:
+        - relax
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+        - '@writefile'
+    jobNames: []
+    type: ParsedLaTeXAuxilary
+  /usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc:
+    timeStamp: 2016-11-25T18:31:06.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map:
+    timeStamp: 2016-11-25T18:31:10.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1728.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm0600.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm0900.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1095.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1200.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1440.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1728.tfm:
+    timeStamp: 2016-11-25T18:31:36.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr10.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr12.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr6.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr8.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr9.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm:
+    timeStamp: 2016-11-25T18:31:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb:
+    timeStamp: 2016-11-25T18:32:13.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb:
+    timeStamp: 2016-11-25T18:32:13.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb:
+    timeStamp: 2016-11-25T18:32:13.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb:
+    timeStamp: 2016-11-25T18:32:13.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb:
+    timeStamp: 2016-11-25T18:32:13.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb:
+    timeStamp: 2016-11-25T18:32:17.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb:
+    timeStamp: 2016-11-25T18:32:17.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb:
+    timeStamp: 2016-11-25T18:32:17.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb:
+    timeStamp: 2016-11-25T18:32:17.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb:
+    timeStamp: 2016-11-25T18:32:17.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb:
+    timeStamp: 2016-11-25T18:32:17.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb:
+    timeStamp: 2016-11-25T18:32:17.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii:
+    timeStamp: 2016-11-25T18:33:26.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/etexcmds.sty:
+    timeStamp: 2016-11-25T18:33:35.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifluatex.sty:
+    timeStamp: 2016-11-25T18:33:35.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifpdf.sty:
+    timeStamp: 2017-03-26T21:48:50.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty:
+    timeStamp: 2016-11-25T18:33:35.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty:
+    timeStamp: 2016-11-25T18:33:35.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty:
+    timeStamp: 2016-11-25T18:33:35.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty:
+    timeStamp: 2016-11-25T18:33:35.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty:
+    timeStamp: 2017-03-26T21:48:50.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/fontenc.sty:
+    timeStamp: 2017-04-15T22:59:15.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty:
+    timeStamp: 2016-11-25T18:33:41.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd:
+    timeStamp: 2016-11-25T18:33:41.000Z
+    jobNames: []
+    type: FontDescription
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/omsenc.dfu:
+    timeStamp: 2017-02-22T00:01:07.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/ot1enc.dfu:
+    timeStamp: 2017-02-22T00:01:07.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/report.cls:
+    timeStamp: 2016-11-25T18:33:41.000Z
+    jobNames: []
+    type: LaTeXClass
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/size11.clo:
+    timeStamp: 2016-11-25T18:33:41.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.def:
+    timeStamp: 2017-04-15T22:59:15.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.dfu:
+    timeStamp: 2017-02-22T00:01:07.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def:
+    timeStamp: 2017-02-22T00:01:07.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty:
+    timeStamp: 2017-06-30T22:24:08.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/color.cfg:
+    timeStamp: 2016-11-25T18:33:50.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/graphics.cfg:
+    timeStamp: 2016-11-25T18:33:50.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def:
+    timeStamp: 2017-06-25T21:51:33.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/color.sty:
+    timeStamp: 2016-11-25T18:33:50.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphics.sty:
+    timeStamp: 2017-06-25T21:52:12.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphicx.sty:
+    timeStamp: 2017-06-25T21:52:12.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/keyval.sty:
+    timeStamp: 2016-11-25T18:33:50.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/trig.sty:
+    timeStamp: 2016-11-25T18:33:50.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg:
+    timeStamp: 2016-11-25T18:33:53.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.cfg:
+    timeStamp: 2016-11-25T18:33:53.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.sty:
+    timeStamp: 2016-11-25T18:33:53.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/listings/lstmisc.sty:
+    timeStamp: 2016-11-25T18:33:53.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty:
+    timeStamp: 2016-11-25T18:33:56.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grfext.sty:
+    timeStamp: 2016-11-25T18:33:56.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty:
+    timeStamp: 2016-11-25T18:33:56.000Z
+    jobNames: []
+    type: LaTeXStyle
+  /usr/local/texlive/2017/texmf-dist/web2c/texmf.cnf:
+    timeStamp: 2017-05-06T16:23:44.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map:
+    timeStamp: 2017-10-15T14:46:09.641Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt:
+    timeStamp: 2017-10-15T14:46:55.920Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf.cnf:
+    timeStamp: 2017-10-15T14:46:00.646Z
+    jobNames: []
+  Capture4.PNG:
+    timeStamp: 2017-11-26T15:31:23.242Z
+    hash: BIBHv/Q8ISCuLKELbw67xITJR/QplZnAncRRWIF4qdE=
+    jobNames: []
+  Capture5.PNG:
+    timeStamp: 2017-11-26T15:31:23.241Z
+    hash: ni4BrvT7qLRqouJXcBa1o+/gfvJkSYifnr1Pv5WZVVs=
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb:
+    timeStamp: 2016-11-25T18:32:13.000Z
+    jobNames: []
+  /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb:
+    timeStamp: 2016-11-25T18:32:13.000Z
+    jobNames: []
+  TP04.aux:
+    timeStamp: 2017-11-26T20:07:16.278Z
+    hash: Z2/DYbr2aMzjIfqNjcD1aYySsWwTLTRl+bAxYdzczls=
+    jobNames: []
+    type: LaTeXAuxilary
+  TP04.log:
+    timeStamp: 2017-11-26T20:07:16.395Z
+    hash: 2nAzhA97+a5OY6m4I2QfgRdwVfRVTGvrx73Vvs5X47U=
+    jobNames: []
+    type: LaTeXLog
+    subType: pdfTeX
+  TP04.pdf:
+    timeStamp: 2017-11-26T20:07:16.394Z
+    hash: 5Oi+ky21CyYSxDrArK+t5dEZCzIilCwWB6FYYtG1xR8=
+    jobNames: []
+    type: PortableDocumentFormat
+rules:
+  - name: ApplyOptions
+    command: load
+    phase: initialize
+    parameters: []
+    inputs:
+      - dicy.yaml-ParsedYAML
+      - TP04.yaml-ParsedYAML
+      - TP04.tex-ParsedLaTeXMagic
+      - dicy-instance.yaml-ParsedYAML
+      - /Users/geoffreyperrin/.dicy.yaml-ParsedYAML
+    outputs: []
+  - name: LoadAndValidateCache
+    command: load
+    phase: initialize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: ApplyOptions
+    command: load
+    phase: execute
+    parameters: []
+    inputs:
+      - dicy.yaml-ParsedYAML
+      - TP04.yaml-ParsedYAML
+      - TP04.tex-ParsedLaTeXMagic
+      - dicy-instance.yaml-ParsedYAML
+      - /Users/geoffreyperrin/.dicy.yaml-ParsedYAML
+    outputs: []
+  - name: ParseOptionsFile
+    command: load
+    phase: execute
+    parameters: []
+    inputs:
+      - /Users/geoffreyperrin/.dicy.yaml
+    outputs:
+      - /Users/geoffreyperrin/.dicy.yaml-ParsedYAML
+  - name: ParseLaTeXMagic
+    command: load
+    phase: execute
+    parameters:
+      - TP04.tex
+    inputs:
+      - TP04.tex
+    outputs:
+      - TP04.tex-ParsedLaTeXMagic
+  - name: AssignJobNames
+    command: load
+    phase: finalize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: FindLogFiles
+    command: build
+    phase: initialize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: LaTeX
+    command: build
+    phase: execute
+    parameters:
+      - TP04.tex
+    inputs:
+      - TP04.tex
+      - TP04.fls-ParsedFileListing
+      - TP04.log-ParsedLaTeXLog
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc
+      - /usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecbx1728.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm0600.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm0900.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1095.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1200.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1440.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/jknappen/ec/ecrm1728.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr6.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
+      - /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb
+      - /usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/fontenc.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/omsenc.dfu
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/ot1enc.dfu
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/report.cls
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/size11.clo
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.def
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.dfu
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/color.cfg
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/color.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphics.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphicx.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/keyval.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/graphics/trig.sty
+      - >-
+        /usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.cfg
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/listings/lstmisc.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grfext.sty
+      - /usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+      - /usr/local/texlive/2017/texmf-dist/web2c/texmf.cnf
+      - /usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+      - /usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt
+      - /usr/local/texlive/2017/texmf.cnf
+      - Capture4.PNG
+      - Capture5.PNG
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+      - >-
+        /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
+      - TP04.aux
+    outputs:
+      - TP04.aux
+      - TP04.log
+      - TP04.pdf
+  - name: CheckForMissingBuildRule
+    command: build
+    phase: finalize
+    parameters:
+      - TP04.tex
+    inputs:
+      - TP04.tex
+    outputs: []
+  - name: FindLogFiles
+    command: log
+    phase: initialize
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: ReportLogMessages
+    command: log
+    phase: execute
+    parameters:
+      - TP04.log-ParsedLaTeXLog
+    inputs:
+      - TP04.log-ParsedLaTeXLog
+    outputs: []
+  - name: ParseLaTeXLog
+    command: log
+    phase: execute
+    parameters:
+      - TP04.log
+    inputs: []
+    outputs:
+      - TP04.log-ParsedLaTeXLog
+  - name: SaveCache
+    command: save
+    phase: execute
+    parameters: []
+    inputs: []
+    outputs: []
+  - name: ParseLaTeXLog
+    command: build
+    phase: execute
+    parameters:
+      - TP04.log
+    inputs: []
+    outputs:
+      - TP04.log-ParsedLaTeXLog
+  - name: ParseLaTeXAuxilary
+    command: build
+    phase: execute
+    parameters:
+      - TP04.aux
+    inputs: []
+    outputs:
+      - TP04.aux-ParsedLaTeXAuxilary
+  - name: ParseFileListing
+    command: build
+    phase: execute
+    parameters:
+      - TP04.fls
+    inputs: []
+    outputs:
+      - TP04.fls-ParsedFileListing

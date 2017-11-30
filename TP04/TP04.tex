@@ -28,7 +28,6 @@
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
     breakatwhitespace=false,
-    commentstyle=\color{codegreen},   
     breaklines=true,
     captionpos=b,
     keepspaces=true,
@@ -37,19 +36,13 @@
     showspaces=false,
     showstringspaces=false,
     showtabs=false,
-    tabsize=2,
-     morekeywords={mov, push, xor, extern, div, mov, inc, cmp, jne, call, pop, ret,endp, proc, end, dec, add, jb, dd, db, jge,  not, lea, main, public, movzx},
-   extendedchars=true,
-    sensitive=false,
-   morecomment=[l]*,
-   morecomment=[l];,
-    literate= {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1 {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1,
-  }
+    tabsize=2
+}
 
 \lstset{style=mystyle}
 
 %Gummi|065|=)
-\title{\textbf{TP04 - Prise en main de l'environement de développement assembleur et premiers programmes }
+\title{\textbf{TP03 - Prise en main de l'environement de développement assembleur et premiers programmes }
 \author{Geoffrey PERRIN \\ Océane DUBOIS\\}
 \date{}}
 
@@ -68,8 +61,7 @@ La variable longueure est définie comme un data double word (il occupe ainsi to
 
 Le programme fonctionne donc ainsi :
 \begin{itemize}
-\item La fonction main (seule fonction du programme), commence par réaliser une sauvegarde pour le code 'C' grâce à push ebx (le contenu de ebx est mis sur le sommet de la pile) 
-
+\item L
 \item puis le registre ebx est mis à 0
 \item puis on définie la ligne de programme qui suit avec l'étiquette "suivant". Cet ligne permet de mettre dans eax le contenu de l'adresse pointée par la somme de ebx et l'adresse de message. Le reste du registre sera completé par des zéros. Ebx va ici nous servir de controleur pour le nombre d'itération effectuées.
 \item puis on met sur la pile le caratère à afficher et on appel la fonction c "putchar" qui elle-meme appelle fputchar qui permet d'afficher le caractère qui à été mis sur la pile.
@@ -158,17 +150,16 @@ main        proc
 			mov		ecx, 10         ;base dans laquelle on souhaite convertir la variable nombre
 			mov		eax, [nombre]
 
-suivant :
-      xor 	edx, edx
-	    div	    ecx      ; on divise eax (nombre) par ecx (ici 10)
-	    mov     [chaine+ebx], dl ; le reste est placé dans le registre edx (le reste sera toujours inferieur a 32 donc il occupera donc toujours au plus les 4 premiers bits de dl) chaque case de chaine étant de 1 octet on copie le registre dl (de 1 octet aussi) dans notre case mémoire de chaine
-	    inc     ebx         ; on incrémente ebx pour qu'a la prochaine occurence, dl soit placé dans la case mémoire suivante
-	    cmp     eax, 0       ; si le resultat de la division (registre eax) est 0 alors la conversion est terminé sinon on continue
-	    jne     suivant
+suivant :		xor 	edx, edx
+			div	ecx                ; on divise eax (nombre) par ecx (ici 10)
+			mov		[chaine+ebx], dl ; le reste est placé dans le registre edx (le reste sera toujours inferieur a 32 donc il occupera donc toujours au plus les 4 premiers bits de dl) chaque case de chaine étant de 1 octet on copie le registre dl (de 1 octet aussi) dans notre case mémoire de chaine
+      inc		ebx              ; on incrémente ebx pour qu'a la prochaine occurence, dl soit placé dans la case mémoire suivante
+			cmp		eax, 0           ; si le resultat de la division (registre eax) est 0 alors la conversion est terminé sinon on continue
+			jne		suivant
 
-	    call    getchar     ; Attente de l'appui sur "Entree"
-	    pop     ebx
-      ret          ; Retour au code de demarrage 'C'
+			call    getchar         ; Attente de l'appui sur "Entree"
+			pop     ebx
+      ret                     ; Retour au code de demarrage 'C'
 
 main       endp
 
@@ -177,7 +168,7 @@ end
 
 \end{lstlisting}
 
-La chaine contient les chiffres brut. Mais putchar affiche les caractères avec la table ASCII.
+La chaine contient les chiffres brut. Mais putchar affiche les caracteres avec la table ASCII.
 \\Le caractere 0 ne correspond pas au chiffre 0 dans la table ASCII. On ajoute donc "O" (soit le numero du caractere "0" dans la table ASCII) a nos chiffres pour les faire correspondre aux bon caractere et donc les afficher correctement.
 
 \subsection{Affichage du nombre}
@@ -195,22 +186,19 @@ main        proc
 			mov		ecx, 10
 			mov		eax, [nombre]
 
-suivant :		
-      xor 	edx, edx
-			div	    ecx
+suivant :		xor 	edx, edx
+			div	ecx
 			mov		[chaine+ebx], dl
       inc		ebx
 			cmp		eax, 0
 			jne		suivant
-			dec		ebx     ; on reprend le programme précédent et on decremente ebx pour avoir le bon nombre de chiffres de notre nombre converti.
+			dec		ebx             ; on reprend le programme précédent et on decremente ebx pour avoir le bon nombre de chiffres de notre nombre converti.
 
 
-affichage : 
+affichage : movzx   eax, byte ptr[ebx + chaine] on met dans le registre eax un cara caractere de chaine a chaque iteration. On commence par la fin (ici ebx est égale l'index du dernier caractere de chaine)
 
-      movzx   eax, byte ptr[ebx + chaine]  ; on met dans le registre eax un cara caractere de chaine a chaque iteration. On commence par la fin (ici ebx est égale l'index du dernier caractere de chaine)
-
-			add			eax, "0"        ; on ajoute le numero du caractere '0' a notre chiffre pour l'afficher correctement
-      push   	eax         		; on ajoute sur la pile le caractere a afficher
+			add			eax, "0"        ; on joute le numero du caractere '0' a notre chiffre pour l'afficher correctement
+      push   	eax         		; on push le caractere a afficher
       call    putchar     		; Appel de putchar
       add     esp, 4      		; Nettoyage de la pile apres appel
   		dec     ebx             ; Caractere precedent
@@ -267,8 +255,7 @@ main        proc
 			pop ecx             ; on recupere les registres eax et ebx sauvegardé dans la pile
 			pop eax
 
-suivant :
-      xor 	edx, edx
+suivant :		xor 	edx, edx
 			div	ecx
 			mov		[chaine+ebx], dl
       inc		ebx
@@ -277,17 +264,17 @@ suivant :
 			dec		ebx
 
 
-affichage : 
-      movzx   eax, byte ptr[ebx + chaine]
-	    add			eax, "0"
+affichage : movzx   eax, byte ptr[ebx + chaine]
+
+			add			eax, "0"
       push   	eax         		; Caractere a afficher
       call    putchar     		; Appel de putchar
       add     esp, 4      		; Nettoyage de la pile apres appel
-  	  dec     ebx             ; Caractere suivant
+  		dec     ebx             ; Caractere suivant
 	    cmp     ebx, 10 				; Toute la longueur ?
       jb     	affichage       ; si non, passer au suivant
-	    call    getchar         ; Attente de l'appui sur "Entree"
-	    pop     ebx
+			call    getchar         ; Attente de l'appui sur "Entree"
+			pop     ebx
       ret                     ; Retour au code de demarrage 'C'
 
 main       endp
