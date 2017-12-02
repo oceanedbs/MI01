@@ -1,0 +1,133 @@
+\documentclass[11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+ \usepackage{listings}
+\usepackage{amsmath}
+
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{color}
+\pagestyle{fancy}
+
+
+ \lhead{Geoffrey PERRIN - Océane DUBOIS}
+ \rhead{}
+ \rfoot{}
+
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,
+    commentstyle=\color{codegreen},   
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+     morekeywords={mov, push, xor, extern, div, mov, inc, cmp, jne, call, pop, ret,endp, proc, end, dec, add, jb, dd, db, jge,  not, lea, main, public, movzx},
+   extendedchars=true,
+    sensitive=false,
+   morecomment=[l]*,
+   morecomment=[l];,
+    literate= {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1 {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1,
+  }
+
+\lstset{style=mystyle}
+
+%Gummi|065|=)
+\title{\textbf{TP06/TP07 - Traitement d'image - deuxième partie }
+\author{Geoffrey PERRIN \\ Océane DUBOIS\\}
+\date{}}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+Le but de ce TP est de construire un algorithme permettant de détecter les contours d'un image. Pour ce faire on utilisera la méthode du gradient, qui consiste à réaliser la dérivée de l'intensité des pixels, si on observe un maximum, on considère que c'est un contour.
+
+
+\begin{figure}
+\begin{center}
+$
+\begin{bmatrix}
+-1 & 0 & 1 \\
+-2 & 0 & 2 \\
+-1 & 0 & 1 
+\end{bmatrix}
+$
+\end{center}
+\label{sx}
+\caption{Masque de convolution de Sobel Sx}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+$
+\begin{bmatrix}
+1 & 2 & 1 \\
+0 & 0 & 0 \\
+-1 & -2 & -1 
+\end{bmatrix}
+$
+\label{sy}
+\end{center}
+\caption{Masque de convolution de Sobel Sy}
+\end{figure}
+
+
+Pour nous aider à retrouver le gradient des pixels de l'image, on utilisera l'opérateur de sobel qui est composé de 2 masques de convolution Sx et Sy définis par \ref{sx} et \ref{sy}.
+
+Attention, on ne pourra pas appliquer les masques sur la première et dernière ligne de pixel ni sur la première et dernière colone de pixel car le masque dépasserait de l'image. Pour le TP on ignorera cet lignes et colones. 
+
+
+\section{Calcul des adresses source et destination}
+
+Soit esi contient l'adresse du premier pixel auquel on applique le masque et edi est l'adresse du pixel de l'image de destination (img\_temp2). On stocke dans ebp la taille d'une ligne de pixels.
+
+Ainsi ecx contient la hauteur de l'image, à laquelle on soustrait 2 pour ignorer la première et la dernière ligne.
+
+Esi contient l'adresse du premier pixel de l'image tmp1
+Edi contient l'adresse du premier pixel de l'image tmp2
+Ebp contient le nombre de pixel sur la ligne d'une image. 
+
+Pour connaitre la taille d'une ligne il suffit de multiplier Ebp par 4(la taille d'un 
+
+
+\section{Contruction de la double itération}
+
+Dans le but d'économiser un registre, ecx contiendra sur la partie haute le compteur de lignes et sur sa partie base le compteur de colones.Ainsi on peut récupérer facilement le comtpeur des lignes dans cx.
+
+
+
+
+
+\section{Itération sur les lignes}
+
+Au début de la boucle on initialise les bits de poids fort avec ebp -2, pour ignorer les premières et dernièrers lignes. 
+
+A la fin de chaque ligne on décrémente de 1 les bits de poids fort de ecx. Lorsque les bits de poids forts de ecx arrivent à 0, on arrête la boucle. 
+
+\section{Itération sur les colones}
+A chaque itération sur les colones, on test cx, si cx arrive à 0 on décrémente la partie haute de ecx et on remet cx à epb-2.
+\section{Calcul du gradient de chaque pixel}
+
+
+\end{document}
