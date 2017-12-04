@@ -28,7 +28,7 @@
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
     breakatwhitespace=false,
-    commentstyle=\color{codegreen},   
+    commentstyle=\color{codegreen},
     breaklines=true,
     captionpos=b,
     keepspaces=true,
@@ -61,8 +61,8 @@
 
 \section{squelette du sous-programme process\_image\_asm}
 
-Sachant que le compilateur empile les arguments dans l'ordre inverse de celui dans lequel ils sont passés à la fonction, ecx contient d'abord la largeur de l'image puis il est multiplié par la hauteur de l'image, ainsi on obtient le nombre de pixels de l'image. 
-Dans esi, on met le pointeur vers l'image source et edi contient un pointeur vers l'image tempon 1. 
+Sachant que le compilateur empile les arguments dans l'ordre inverse de celui dans lequel ils sont passés à la fonction, ecx contient d'abord la largeur de l'image puis il est multiplié par la hauteur de l'image, ainsi on obtient le nombre de pixels de l'image.
+Dans esi, on met le pointeur vers l'image source et edi contient un pointeur vers l'image tempon 1.
 
 
 \begin{figure}[ht]
@@ -73,7 +73,7 @@ Dans esi, on met le pointeur vers l'image source et edi contient un pointeur ver
 \section{Conversion en niveaux de gris}
 
 Sachant que les pixels sont indexés de 1 à n, et que ecx contient l'index d'un pixel donné et esi contient un pointeur vers l'image source, on peut exprimer edi ainsi : $edi=esi+ecx*4-1$
-En effet on ajoute au pointeur de l'image de départ, l'index du pixel multiplié par 4 qui correpond à la taille d'un pixel (un pixel occupe 4 octets en mémoire) et on retire 1 car les pixels sont indexés de 1 à n. 
+En effet on ajoute au pointeur de l'image de départ, l'index du pixel multiplié par 4 qui correpond à la taille d'un pixel (un pixel occupe 4 octets en mémoire) et on retire 1 car les pixels sont indexés de 1 à n.
 
 
 Pour parcourir tous les pixels de l'image source, on utilise une structure de type :
@@ -85,28 +85,47 @@ do{
 \end{lstlisting}
 \medskip
 
-En assembleur cela correspond à : 
+En assembleur cela correspond à :
 
 
 //// METTRE LE CODE ASSEMBLEUR QU'ON A UTILISE POUR LE WHILE
 
 
-Il est plus facile de partir du dernier pixel de l'image car ecx contient déjà le nombre de pixel total de la photo. 
+Il est plus facile de partir du dernier pixel de l'image car ecx contient déjà le nombre de pixel total de la photo.
 
-Pour convertir une image en nuance de gris on utilise la formule suivante : 
+Pour convertir une image en nuance de gris on utilise la formule suivante :
 $I=R*0,299+V*0,587+B*0,114$
 
 On converti pour la suite du TP les coefficients de ce calcul en hexadécimal.
-On obtient donc, en virgule fixe sur 16 bits avec un décalage à la virgule de +8 : 
+On obtient donc, en virgule fixe sur 16 bits avec un décalage à la virgule de +8 :
 \begin{itemize}
-\item  0,299 =  0000 0000 12B0 0000
-\item 0,587 = 0000 0000 24B0 0000
-\item 0,114 = 0000 0000 7200 0000
+\item  Cr = 0,299 =  00,4Ch
+\item  Cv = 0,587 = 00,96h
+\item  Cb = 0,114 = 00,1Dh
 \end{itemize}
 
-Sachant que la valeur max que peut prendre les coefficients R, V et B est 255 et que la somme des 3 coefficient du calcul de I vaut 1, on aura donc comme valeur max $1*255$, qui vaut donc 255. Sur 8 bits on peut coder au plus 255 valeurs, il n'y aura donc pas de débordements (en faisant l'hypothèque que si nous avons besoin de faire des arrondis, on les ferra vers la valeur inferieure).
+/////EXPLIQUER COMMENT MULTIPLIER DEUX NOMBRES DE 16 BITS AVEC VIRGULE FIXE
 
-On souhaite éviter les débordements pour éviter de perdre de l'information sur l'image. 
+Pour faciliter le calcul sachant que la partie entiere des coefficient et que la partie décimal des valeur de RVB sont toujours nulle on peut simplifier le calcul:
+
+On décale de 8 bits a gauche les coefficients. (On peut se permmetre de perdre l'information de la partie entiere car elle est toujours nulle.)
+Alors Cr = 4Ch, Cv = 96h, Cb=1Dh.
+Ainsi les coefficients sont réduit a des entiers de 8 bits.
+
+De plus la partie décimal des valeurs de R,V,B étant nulle on peut réduire ces valeurs a des entier de 8 bit en ométant la partie décimal.
+
+On a donc transformé la multiplication entre deux réels de 16 bits en une multiplication entre deux entiers de 8 bits.
+
+Mais en faisant ce décalage de 8 bits vers la gauche on a multiplié le resultat final par 256.
+Il suffit donc de redécaler de 8 bits vers la droite le résultat final pour le diviser par 256 et donc trouver le résultat attendu.
+
+
+Lors de la conversion des coefficient en hexadecimal sur 16 bits nous ne faisons qu'approcher la valeur des coefficient. Il y a une perte d'informaton lié au nombre limité de bit.
+
+Sachant que la valeur max que peut prendre les coefficients R, V et B est 255 et que la somme des 3 coefficient du calcul de I est inférieur ou égale 1, on aura donc comme valeur max $1*255$, qui vaut donc 255. Sur 8 bits on peut coder au plus 255 valeurs, il n'y aura donc pas de débordements.
+Nous avons décidé d'arrondir au coefficient inferieur le plus proche pour que la somme des coeffcients reste inferireur ou égale a 1.
+
+On souhaite éviter les débordements pour éviter de perdre de l'information sur l'image.
 
 \medskip
 
