@@ -136,11 +136,16 @@ On souhaite éviter les débordements pour éviter de perdre de l'information su
 
 \medskip
 
-/// METTRE LE CODE ASSEMBLEUR EN CONSIDERANT QUE R, V, et B SONT DES ENTIERS A VIRGULE
+Si on considère que les valeurs de R, V et B, sont des entiers à virgules fixes, il suffit de multiplier également chacun de ces coefficients par 256. 
+Ainsi : 
+
+$I=R*256*0.299*256+V*256*0587*256*B*256*0.114*256 $
 
 
+Pour obtenir la valeur correcte du résultat il suffit de diviser le résultat par $ 256^2$ 
 
-On peut effectivement simplifier l'algorithme en considérant qu la partie entière des coefficients multiplicateurs est toujours nulle et que la partie décimales des coefficient R, V, B est toujours nulle.
+
+On peut cependant simplifier l'algorithme en considérant que la partie entière des coefficients multiplicateurs est toujours nulle et que la partie décimales des coefficient R, V, B est toujours nulle.
 
 Voici donc le code avec la simplification, on stockera l'image dans l'image temporaire 1 : 
 
