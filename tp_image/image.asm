@@ -1,8 +1,8 @@
 ; IMAGE.ASM
 ;
-; MI01 - TP Assembleur 2 à 5
+; MI01 - TP Assembleur 2 ï¿½ 5
 ;
-; Réalise le traitement d'une image 32 bits.
+; Rï¿½alise le traitement d'une image 32 bits.
 
 .686
 .MODEL FLAT, C
@@ -14,60 +14,77 @@
 ; **********************************************************************
 ; Sous-programme _process_image_asm
 ;
-; Réalise le traitement d'une image 32 bits.
+; Rï¿½alise le traitement d'une image 32 bits.
 ;
-; Entrées sur la pile : Largeur de l'image (entier 32 bits)
+; Entrï¿½es sur la pile : Largeur de l'image (entier 32 bits)
 ;           Hauteur de l'image (entier 32 bits)
-;           Pointeur sur l'image source (dépl. 32 bits)
-;           Pointeur sur l'image tampon 1 (dépl. 32 bits)
-;           Pointeur sur l'image tampon 2 (dépl. 32 bits)
-;           Pointeur sur l'image finale (dépl. 32 bits)
+;           Pointeur sur l'image source (dï¿½pl. 32 bits)
+;           Pointeur sur l'image tampon 1 (dï¿½pl. 32 bits)
+;           Pointeur sur l'image tampon 2 (dï¿½pl. 32 bits)
+;           Pointeur sur l'image finale (dï¿½pl. 32 bits)
 ; **********************************************************************
 PUBLIC      process_image_asm
-process_image_asm   PROC NEAR       ; Point d'entrée du sous programme
+process_image_asm   PROC NEAR       ; Point d'entrÃ©e du sous programme
 
-  push    ebp
-  mov     ebp, esp
+        push    ebp
+        mov     ebp, esp
 
-  push    ebx
-  push	  eax
-  push   	edx
-  push    esi
-  push    edi
+        push    ecx
+        push	eax
+        push   	edx
 
-  mov     ecx, [ebp + 8]
-  imul    ecx, [ebp + 12]
 
-  mov     esi, [ebp + 16]
-  mov     edi, [ebp + 20]
+        ;rÃ©cupÃ©ration des arguments dans les diffÃ©rents registres
+        mov     ecx, [ebp + 8]
+        imul    ecx, [ebp + 12]
 
-;*****************************************************************
-;*****************************************************************
-; Ajoutez votre code ici
-;*****************************************************************
-;*****************************************************************
+        mov     esi, [ebp + 16]
+        mov     edi, [ebp + 20]
+
         xor		 edx,edx
-boucle: dec    ecx
-		mov		 ebx,[esi+ecx*4]
+        ;dÃ©but de la boucle
+boucle: dec      ecx
+        ;on rÃ©cupÃ©re le pixel de l'image source Ã  traiter
+        mov		 ebx,[esi+ecx*4]
+
+        ;-------------------
+        ;calcul de B * 0,114
+        ;-------------------
 
         mov	     eax,ebx
+        ;on rÃ©cupere la composante bleu dans eax
         and      eax,000000FFh
-        imul	 eax,1Dh
+        ;on effectue le calcul
+        imul	 eax,1Dh ;B * 0,114
+        ;on stock la somme (I) dans edx
         mov      edx,eax
 
+        ;-------------------
+        ;calcul de V *,0,587
+        ;-------------------
+
+        ;on rÃ©cupere la composante verte dans eax
         mov	     eax,ebx
         and      eax,0000FF00h
-		shr		 eax,8
-        imul	 eax,96h
-		add      edx,eax
+        shr		 eax,8
+        ;on effectue le calcul
+        imul	 eax,96h ;V *,0,587
+        add      edx,eax ;I=I+V *,0,587
 
+        ;-------------------
+        ;calcul de R*0,299
+        ;-------------------
+        ;on rÃ©cupere la composante rouge dans eax
         mov	     eax,ebx
         and      eax,00FF0000h
-		shr		 eax,16
+        shr		 eax,16
+        ;on effectue le calcul
         imul	 eax,4Ch
-		add      edx,eax
+        add      edx,eax ;I=I+R*0,299
 
+        ;on divise par 256
         shr		 edx,8
+        ;on stock I dans la composante bleu de l'image destination
         mov		 [edi+ecx*4],edx
 
 
@@ -75,13 +92,11 @@ boucle: dec    ecx
         ja     boucle
 
 fin:
-pop     edi
-pop     esi
-pop		  edx
-pop		  eax
-pop     ebx
-pop     ebp
-ret                         ; Retour à la fonction MainWndProc
+        pop     edx
+        pop     eax
+        pop     ecx
+        pop     ebp
+        ret                         ; Retour Ã  la fonction MainWndProc
 
 process_image_asm   ENDP
 END
