@@ -29,7 +29,7 @@
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
     breakatwhitespace=false,
-    commentstyle=\color{codegreen},   
+    commentstyle=\color{codegreen},
     breaklines=true,
     captionpos=b,
     keepspaces=true,
@@ -69,7 +69,7 @@ $
 \begin{bmatrix}
 -1 & 0 & 1 \\
 -2 & 0 & 2 \\
--1 & 0 & 1 
+-1 & 0 & 1
 \end{bmatrix}
 $
 \end{center}
@@ -84,7 +84,7 @@ $
 \begin{bmatrix}
 1 & 2 & 1 \\
 0 & 0 & 0 \\
--1 & -2 & -1 
+-1 & -2 & -1
 \end{bmatrix}
 $
 \label{sy}
@@ -95,7 +95,7 @@ $
 
 Pour nous aider à retrouver le gradient des pixels de l'image, on utilisera l'opérateur de sobel qui est composé de 2 masques de convolution Sx et Sy définis par \ref{sx} et \ref{sy}.
 
-Attention, on ne pourra pas appliquer les masques sur la première et dernière ligne de pixel ni sur la première et dernière colone de pixel car le masque dépasserait de l'image. Pour le TP on ignorera cet lignes et colones. 
+Attention, on ne pourra pas appliquer les masques sur la première et dernière ligne de pixel ni sur la première et dernière colone de pixel car le masque dépasserait de l'image. Pour le TP on ignorera cet lignes et colones.
 
 
 \section{Calcul des adresses source et destination}
@@ -106,9 +106,9 @@ Ainsi ecx contient la hauteur de l'image, à laquelle on soustrait 2 pour ignore
 
 Esi contient l'adresse du premier pixel de l'image tmp1
 Edi contient l'adresse du premier pixel de l'image tmp2
-Ebp contient le nombre de pixel sur la ligne d'une image. 
+Ebp contient le nombre de pixel sur la ligne d'une image.
 
-Pour connaitre la taille d'une ligne il suffit de multiplier Ebp par 4(la taille d'un 
+Pour connaitre la taille d'une ligne il suffit de multiplier Ebp par 4(la taille d'un
 
 
 \section{Contruction de la double itération}
@@ -121,9 +121,9 @@ Dans le but d'économiser un registre, ecx contiendra sur la partie haute le com
 
 \section{Itération sur les lignes}
 
-Au début de la boucle on initialise les bits de poids fort avec ebp -2, pour ignorer les premières et dernièrers lignes. 
+Au début de la boucle on initialise les bits de poids fort avec ebp -2, pour ignorer les premières et dernièrers lignes.
 
-A la fin de chaque ligne on décrémente de 1 les bits de poids fort de ecx. Lorsque les bits de poids forts de ecx arrivent à 0, on arrête la boucle. 
+A la fin de chaque ligne on décrémente de 1 les bits de poids fort de ecx. Lorsque les bits de poids forts de ecx arrivent à 0, on arrête la boucle.
 
 \section{Itération sur les colones}
 A chaque itération sur les colones, on test cx, si cx arrive à 0 on décrémente la partie haute de ecx et on remet cx à epb-2.

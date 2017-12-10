@@ -71,8 +71,9 @@ Dans esi, on met le pointeur vers l'image source et edi contient un pointeur ver
 
 \section{Conversion en niveaux de gris}
 
-Sachant que les pixels sont indexés de 1 à n, et que ecx contient l'index d'un pixel donné et esi contient un pointeur vers l'image source, on peut exprimer edi ainsi : $edi=esi+ecx*4-1$
-En effet on ajoute au pointeur de l'image de départ, l'index du pixel multiplié par 4 qui correpond à la taille d'un pixel (un pixel occupe 4 octets en mémoire) et on retire 1 car les pixels sont indexés de 1 à n.
+Sachant que les pixels sont indexés de 1 à n, et que ecx contient l'index d'un pixel donné et esi contient un pointeur vers l'image source,alors l'adresse du pixel d'index ecx de l'image source sera: $esi+ecx*4-1$.
+\\L'adresse du pixel d'index ecx de l'image destination sera: $edi+ecx*4-1$.
+\\En effet on ajoute au pointeur de l'image de départ, l'index du pixel multiplié par 4 qui correpond à la taille d'un pixel (un pixel occupe 4 octets en mémoire) et on retire 1 car les pixels sont indexés de 1 à n et non de 0 à n-1.
 
 
 Pour parcourir tous les pixels de l'image source, on utilise une structure de type :
@@ -87,16 +88,14 @@ do{
 En assembleur pourrait correspond à :
 
 \begin{lstlisting}
-boucle :
-		; traitement de l'image
-		dec		ecx
-		cmp		ecx, 0
-		ja		boucle
-
+boucle: dec      ecx
+        mov		 ebx,[esi+ecx*4]
+        ;Traitement
+        cmp    ecx, 0
+        ja     boucle
 \end{lstlisting}
 
-
-Il est plus facile de partir du dernier pixel de l'image car ecx contient déjà le nombre de pixel total de la photo, ensuite on décrémentera petit à petit jusqu'à 0.
+Il est plus facile de partir du dernier pixel de l'image car ecx contient déjà le nombre de pixel total de la photo.
 
 Pour convertir une image en nuance de gris on utilise la formule suivante :
 $I=R*0,299+V*0,587+B*0,114$
@@ -110,14 +109,11 @@ On obtient donc, en virgule fixe sur 16 bits avec un décalage à la virgule de 
 \item  Cb = 0,114 = 00,1Dh
 \end{itemize}
 
-Sachant que le calcul est plus compliqué avec des nombres a virgules (car ils impliquent des puissances de 2 négatives), on multiplie chaque coefficient par 256 pour que ce soit un nombre entier, on n'oubliera pas de diviser le resultat final par 256.
+Sachant que la partie entiere des coefficient et que la partie décimal des valeur de RVB sont toujours nulle on peut simplifier le calcul:
 
-
-Pour faciliter le calcul sachant que la partie entiere des coefficient et que la partie décimal des valeur de RVB sont toujours nulle on peut simplifier le calcul:
-
-On décale de 8 bits a gauche les coefficients. (On peut se permmetre de perdre l'information de la partie entiere car elle est toujours nulle.)
+On décale de 8 bits a gauche les coefficients. (On peut se permmetre de perdre l'information de la partie entiere car elle est toujours nulle)
 Alors Cr = 4Ch, Cv = 96h, Cb=1Dh.
-Ainsi les coefficients sont réduit a des entiers de 8 bits.
+Ainsi les coefficients sont réduit à des entiers de 8 bits.
 
 De plus la partie décimal des valeurs de R,V,B étant nulle on peut réduire ces valeurs a des entier de 8 bit en ométant la partie décimal.
 
@@ -129,113 +125,104 @@ Il suffit donc de redécaler de 8 bits vers la droite le résultat final pour le
 
 Lors de la conversion des coefficient en hexadecimal sur 16 bits nous ne faisons qu'approcher la valeur des coefficient. Il y a une perte d'informaton lié au nombre limité de bit.
 
-Sachant que la valeur max que peut prendre les coefficients R, V et B est 255 et que la somme des 3 coefficient du calcul de I est inférieur ou égale 1, on aura donc comme valeur max $1*255$, qui vaut donc 255. Sur 8 bits on peut coder au plus 255 valeurs, il n'y aura donc pas de débordements.
+Sachant que la valeur maximal que peut prendre les coefficients R, V et B est 255 et que la somme des 3 coefficient du calcul de I est inférieur ou égale 1, on aura donc comme valeur max $1*255$, qui vaut donc 255. Sur 8 bits on peut coder au plus 255 valeurs, il n'y aura donc pas de débordements.
 Nous avons décidé d'arrondir au coefficient inferieur le plus proche pour que la somme des coeffcients reste inferireur ou égale a 1.
 
 On souhaite éviter les débordements pour éviter de perdre de l'information sur l'image.
 
 \medskip
 
-/// METTRE LE CODE ASSEMBLEUR EN CONSIDERANT QUE R, V, et B SONT DES ENTIERS A VIRGULE
-
-
-
-On peut effectivement simplifier l'algorithme en considérant qu la partie entière des coefficients multiplicateurs est toujours nulle et que la partie décimales des coefficient R, V, B est toujours nulle.
-
-Voici donc le code avec la simplification, on stockera l'image dans l'image temporaire 1 : 
-
 
 \begin{lstlisting}
-; IMAGE.ASM
-;
-; MI01 - TP Assembleur
-;
-; Réalise le traitement d'une image 32 bits.
-
-.686
-.MODEL FLAT, C
-
-.DATA
-
-.CODE
-
-; ************************************************************
-; Sous-programme _process_image_asm
-;
-; Réalise le traitement d'une image 32 bits.
-;
-; Entrées sur la pile : Largeur de l'image (entier 32 bits)
-;           Hauteur de l'image (entier 32 bits)
-;           Pointeur sur l'image source (dépl. 32 bits)
-;           Pointeur sur l'image tampon 1 (dépl. 32 bits)
-;           Pointeur sur l'image tampon 2 (dépl. 32 bits)
-;           Pointeur sur l'image finale (dépl. 32 bits)
-; ************************************************************
 PUBLIC      process_image_asm
 process_image_asm   PROC NEAR       ; Point d'entrée du sous programme
 
-  push    ebp				; sauvegarde de ebp dans la pile	
-  mov     ebp, esp 	; on met l'actuel pointeur de pile dans ebp
+        push    ebp
+        mov     ebp, esp
 
-  push    ebx				; sauvegarde des registres ebx, eax, edx, esi et edi
-  push	  eax
-  push   	edx
-  push    esi
-  push    edi
-
-  mov     ecx, [ebp + 8]	;ecx contient la largeur d'une image
-  imul    ecx, [ebp + 12]	; on multiplie ecx par la hauteur de l'image, on obtient donc la dimension de l'image
-
-  mov     esi, [ebp + 16]	; pointeur vers l'image source
-  mov     edi, [ebp + 20]	; pointeur vers l'image temporaire 1
-
-;**********************************************************
-     	 xor		 edx,edx 			;mise à 0 de edx
-     	 
-boucle: mov		 ebx,[esi+ecx*4] ; on place dans ebx un pointeur vers le dernier pixel de l'image
-        movzx	 eax,bl 			;on place bl dans eax
-        mov		 dx,1Dh				;on place 1Dh dans dx
-        mul		 dx 					; on multiplie dx et al ensemble
-        push	 eax 					;on sauvegarde eax
-
-        shr    ebx,8				; on déplace vers la droite ebx de 8 bits pour récupérer la composante verte du pixel
-        movzx	 eax,bl
-        mov		 dx,96h
-        mul		 dx
-        push	 eax
-
-        shr		 ebx,8				;on déplace encore une fois pour récupérer la composante rouge du pixel
-        movzx	 eax,bl
-        mov		 dx,4Ch
-        mul		 dx
-        pop		 ebx 					;on récupère le résultat de la composante vert
-        add		 eax,ebx 			;on additione le réultat de rouge et du vert ensemble
-        pop		 ebx 					;on récupère la composante bleue 
-        add		 eax,ebx  		;on additione pour avoir la somme des composantes rouges, vertes et bleue
-        shr		 eax,8				;on divise par 256 le résultat final
-        mov		 [edi+ecx*4],eax	;on stocke le résultat dans l'image temporaire 1
+        push    ecx
+        push	eax
+        push   	edx
 
 
-        dec    ecx					; on décréement ecx pour passer au pixel précédent
+        ;récupération des arguments dans les différents registres
+        mov     ecx, [ebp + 8]
+        imul    ecx, [ebp + 12]
+
+        mov     esi, [ebp + 16]
+        mov     edi, [ebp + 20]
+
+        xor		 edx,edx
+        ;début de la boucle
+boucle: dec      ecx
+        ;on récupére le pixel de l'image source à traiter
+        mov		 ebx,[esi+ecx*4]
+
+        ;-------------------
+        ;calcul de B * 0,114
+        ;-------------------
+
+        mov	     eax,ebx
+        ;on récupere la composante bleu dans eax
+        and      eax,000000FFh
+        ;on effectue le calcul
+        imul	 eax,1Dh ;B * 0,114
+        ;on stock la somme (I) dans edx
+        mov      edx,eax
+
+        ;-------------------
+        ;calcul de V *,0,587
+        ;-------------------
+
+        ;on récupere la composante verte dans eax
+        mov	     eax,ebx
+        and      eax,0000FF00h
+        shr		 eax,8
+        ;on effectue le calcul
+        imul	 eax,96h ;V *,0,587
+        add      edx,eax ;I=I+V *,0,587
+
+        ;-------------------
+        ;calcul de R*0,299
+        ;-------------------
+        ;on récupere la composante rouge dans eax
+        mov	     eax,ebx
+        and      eax,00FF0000h
+        shr		 eax,16
+        ;on effectue le calcul
+        imul	 eax,4Ch
+        add      edx,eax ;I=I+R*0,299
+
+        ;on divise par 256
+        shr		 edx,8
+        ;on stock I dans la composante bleu de l'image destination
+        mov		 [edi+ecx*4],edx
+
+
         cmp    ecx, 0
-        ja     boucle				; si on est pas arrivé au premier pixel de l'image on retourne au début de la boucle
+        ja     boucle
 
 fin:
-				pop     edi
-				pop     esi
-				pop		  edx
-				pop		  eax
-				pop     ebx
-				pop     ebp
-				ret                         ; Retour de la fonction MainWndProc
+        pop     edx
+        pop     eax
+        pop     ecx
+        pop     ebp
+        ret                         ; Retour à la fonction MainWndProc
 
 process_image_asm   ENDP
 END
-
 \end{lstlisting}
 
+\begin{figure}[ht]
+\includegraphics[width=10cm]{Capture1.PNG}
+\caption{Execution de l'algorithme de traitement en Assembleur}
+\end{figure}
 
-//FAIRE DES TEST SUR LA VITESSE D'EXECUTION DU PROGRAMME EN C ET EN ASSEMBLEUR
+\begin{figure}[ht]
+\includegraphics[width=10cm]{Capture2.PNG}
+\caption{Execution de l'algorithme de traitement en C}
+\end{figure}
 
-/// copie d'écran du résultat
+Le code en assembleur est plus performant que le code en C.
+L'éxecution du traitement dure en moyenne 0,7ms en assembleur contre 1,26ms en C.
 \end{document}
