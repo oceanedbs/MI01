@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tp_image", "tp_image.vcxproj", "{69B57607-E2A7-40FD-9CCA-EEA58907A83F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{381CBB09-F6B3-4176-AE7D-CEF1B519DD43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69B57607-E2A7-40FD-9CCA-EEA58907A83F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{69B57607-E2A7-40FD-9CCA-EEA58907A83F}.Debug|Win32.Build.0 = Debug|Win32
+		{69B57607-E2A7-40FD-9CCA-EEA58907A83F}.Release|Win32.ActiveCfg = Release|Win32
+		{69B57607-E2A7-40FD-9CCA-EEA58907A83F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
