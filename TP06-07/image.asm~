@@ -113,11 +113,14 @@ boucle: dec      ecx
 		sub		ecx,2
 	
 	boucle2:
-		push ebx
+		;push ebx
+		;mov	ebx, 00FF0000h
 
-		;Gx
+		;mov [edi],ebx
+		;pop	ebx
+
 		xor		ebx, ebx
-		mov		ebx, [esi]
+		mov		ebx, esi
 		imul	ebx,-1
 		add		ebx,[esi+8]
 		mov		eax,[esi+ebp*4]
@@ -131,8 +134,6 @@ boucle: dec      ecx
 		add		ebx,eax
 		add		ebx,[esi+ebp*8+8]
 
-
-		;Gy
 		xor		edx, edx
 		mov		edx, esi
 		mov		eax,[esi+4]
@@ -153,12 +154,12 @@ boucle: dec      ecx
 
 		test	ebx,0
 		jg		gx_positif
-		neg 	ebx
+		imul ebx,-1
 	
 	gx_positif :
 		test	edx, 0
 		jg		gy_positif
-		neg		edx
+		imul	edx, -1
 
 	gy_positif :
 		add ebx, edx
@@ -168,16 +169,7 @@ boucle: dec      ecx
 		test	eax, 0
 		jg		g_positif
 		xor eax,eax
-	g_positif:
-
-		neg eax
-		add eax, 255
-
-		mov edx, eax  ; niveaux de gris
-		shl edx, 8
-		add eax, edx
-		shl edx, 8
-		add eax, edx
+		g_positif:
 
 		mov	[edi], eax
 		
@@ -196,7 +188,6 @@ boucle: dec      ecx
 
 fin:
 		
-		pop 	ebx		
 		pop     edx
         pop     eax
         pop     ecx
