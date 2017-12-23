@@ -162,24 +162,32 @@ boucle: dec      ecx
 
 	gy_positif :
 		add ebx, edx
-		xor eax, eax
-		mov	eax, 255
-		sub eax, ebx
-		test	eax, 0
-		jg		g_positif
-		xor eax,eax
+		jns g_positif
+		neg ebx
+
+
+
 	g_positif:
+		cmp ebx, 000000FFh
+		
+		jle	g_negatif
 
-		neg eax
-		add eax, 255
+		mov	ebx, 255
 
-		mov edx, eax  ; niveaux de gris
-		shl edx, 8
-		add eax, edx
-		shl edx, 8
-		add eax, edx
+	g_negatif :
+		xor eax, eax
+		neg ebx
+		add ebx, 000000FFh
 
-		mov	[edi], eax
+		mov eax, ebx
+		shl ebx, 8
+		add ebx, eax
+		shl ebx, 8
+		add ebx, eax
+		mov [edi], ebx
+		pop ebx
+
+
 		
 
 		add esi, 4

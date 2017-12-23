@@ -39,10 +39,9 @@
     showstringspaces=false,
     showtabs=false,
     tabsize=2,
-     morekeywords={mov, push, xor, extern, div, mov, inc, cmp, jne, call, pop, ret,endp, proc, end, dec, add, jb, dd, db, jge,  not, lea, main, public, movzx},
+     morekeywords={mov, push, xor, extern, div, mov, inc, cmp, jne, call, pop, ret,endp, proc, end, dec, add, jb, dd, db, jge,  not, lea, main, public, movzx, imul, shl, sub, jg, neg, test, jle, jns, jnz},
    extendedchars=true,
     sensitive=false,
-   morecomment=[l]*,
    morecomment=[l];,
     literate= {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1 {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1,
   }
@@ -63,7 +62,7 @@
 Le but de ce TP est de construire un algorithme permettant de détecter les contours d'un image. Pour ce faire on utilisera la méthode du gradient, qui consiste à réaliser la dérivée de l'intensité des pixels, si on observe un maximum, on considère que c'est un contour.
 
 
-\begin{figure}
+\begin{figure}[h]
 \begin{center}
 $
 \begin{bmatrix}
@@ -78,7 +77,7 @@ $
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h]
 \begin{center}
 $
 \begin{bmatrix}
@@ -93,14 +92,14 @@ $
 \end{figure}
 
 
-Pour nous aider à retrouver le gradient des pixels de l'image, on utilisera l'opérateur de sobel qui est composé de 2 masques de convolution Sx et Sy définis par \ref{sx} et \ref{sy}.
+Pour nous aider à retrouver le gradient des pixels de l'image, on utilisera l'opérateur de sobel qui est composé de 2 masques de convolution Sx et Sy définis par les figures 1 et 2.
 
 Attention, on ne pourra pas appliquer les masques sur la première et dernière ligne de pixel ni sur la première et dernière colone de pixel car le masque dépasserait de l'image. Pour le TP on ignorera cet lignes et colones. 
 
 
 \section{Calcul des adresses source et destination}
 
-Soit esi contient l'adresse du premier pixel auquel on applique le masque et edi est l'adresse du pixel de l'image de destination (img\_temp2). On stocke dans ebp la taille d'une ligne de pixels.
+Soit esi contenant l'adresse du premier pixel auquel on applique le masque et edi est l'adresse du premier pixel de l'image de destination (img\_temp2). On stocke dans ebp la taille d'une ligne de pixels.
 
 Ainsi ecx contient la hauteur de l'image, à laquelle on soustrait 2 pour ignorer la première et la dernière ligne.
 
@@ -108,7 +107,7 @@ Esi contient l'adresse du premier pixel de l'image tmp1
 Edi contient l'adresse du premier pixel de l'image tmp2
 Ebp contient le nombre de pixel sur la ligne d'une image. 
 
-Pour connaitre la taille d'une ligne il suffit de multiplier Ebp par 4(la taille d'un 
+Pour connaitre la taille d'une ligne il suffit de multiplier Ebp par 4(la taille d'un pixel en mémoire).
 
 
 \section{Contruction de la double itération}
@@ -116,18 +115,206 @@ Pour connaitre la taille d'une ligne il suffit de multiplier Ebp par 4(la taille
 Dans le but d'économiser un registre, ecx contiendra sur la partie haute le compteur de lignes et sur sa partie base le compteur de colones.Ainsi on peut récupérer facilement le comtpeur des lignes dans cx.
 
 
-
-
-
 \section{Itération sur les lignes}
 
 Au début de la boucle on initialise les bits de poids fort avec ebp -2, pour ignorer les premières et dernièrers lignes. 
 
-A la fin de chaque ligne on décrémente de 1 les bits de poids fort de ecx. Lorsque les bits de poids forts de ecx arrivent à 0, on arrête la boucle. 
+A la fin de chaque ligne on soustrait 00010000h à ecx. Lorsque les bits de poids forts de ecx arrivent à 0, on arrête la boucle. Cela signifie qu'on a traité tous les pixels de l'image.
 
 \section{Itération sur les colones}
-A chaque itération sur les colones, on test cx, si cx arrive à 0 on décrémente la partie haute de ecx et on remet cx à epb-2.
+
+On place donc dans la partie cx du registre ecx, le nombre de colones, stockées dans ebp.
+
+A la fin de chaque colone, on décrémente ecx de 1, lorsque cx est égale à 0 on ira décrémenter la partie haute de ecx.
+
 \section{Calcul du gradient de chaque pixel}
 
+Le gradient de chaque pixel est calculé comme suit : Sur chaque pixel de l'image source, on applique la valeur du masque Sx et on stock le résultat de la somme de tous les pixels dans ebx. On réalise la même opération avec le masque Sy et on stocke le résultat dans edx. 
+
+Puis on doit trouver les valeurs absolues. On test si le résultat de ebx est positif, si il l'est on saute plus loin dans le programme, si il ne l'est pas on lui applique l'opérateur "neg", qui permet de rendre ebx positif. 
+
+On réalise la même opération avec edx. Puis lorsqu'on est sûrs que le résultat de ebx et de edx est positif, on somme les 2. Si le résultat des 2 est positif on saute a g\_positif.
+
+On compare donc ebx à 255, si le résultat est plus petit que 255 on passe à g\_negatif car le résultat est inférieur à l'intensité maximale. Sinon on met le pixel à 255 qui est donc l'intensité maximale. 
+
+Puis pour inverser les couleurs, on prend le négatif de G( =ebx) et on lui ajoute 255. 
+
+On récupère ensuite chaque composante (R, V et B) et on les somme entre-elles.  Puis on place ce résultat dans le pixel de l'image source. 
+
+
+\section{Code}
+
+Voici le code que nous avons implémenté : 
+
+\begin{lstlisting}
+; IMAGE.ASM
+;
+; MI01 - TP Assembleur  5
+;
+; Réalise le traitement d'une image 32 bits.
+
+.686
+.MODEL FLAT, C
+
+.DATA
+
+.CODE
+
+; **********************************************************************
+; Sous-programme _process_image_asm
+;
+; Réalise le traitement d'une image 32 bits.
+;
+; Entrées sur la pile : Largeur de l'image (entier 32 bits)
+;           Hauteur de l'image (entier 32 bits)
+;           Pointeur sur l'image source (dépl. 32 bits)
+;           Pointeur sur l'image tampon 1 (dépl. 32 bits)
+;           Pointeur sur l'image tampon 2 (dépl. 32 bits)
+;           Pointeur sur l'image finale (dépl. 32 bits)
+; **********************************************************************
+PUBLIC      process_image_asm
+process_image_asm   PROC NEAR       ; Point d'entrée du sous programme
+
+   push    ebp
+        mov     ebp, esp
+
+        push		ecx
+        push        eax
+        push        edx
+
+
+        ;récupération des arguments dans les différents registres
+        mov     ecx, [ebp + 8]
+        imul    ecx, [ebp + 12]
+
+        mov     esi, [ebp + 16]
+        mov     edi, [ebp + 20]
+
+        xor                 edx,edx
+       
+		mov ecx,[ebp+12]
+		sub ecx,2
+		shl ecx,16
+
+		mov esi,edi
+		mov     edi, [ebp + 24]
+		mov     ebp, [ebp + 8] ; on récupère la largeur
+		mov		eax,ebp
+		shl		eax,2		; on multiplie la largeur par 4
+		add		edi,eax ; on ajoute au premier pixel de l'image tmp2 4*largeur
+		add		edi, 4
+		mov		cx,bp
+		sub ecx, 00010000h
+
+	
+	boucle3:
+		add		ecx,ebp
+		sub		ecx,2
+	
+	boucle2:
+		push ebx
+
+		;Gx
+		xor		ebx, ebx
+		mov		ebx, [esi]
+		imul	ebx,-1
+		add		ebx,[esi+8]
+		mov		eax,[esi+ebp*4]
+		imul	eax,-2
+		add		ebx,eax
+		mov		eax,[esi+ebp*4+8]
+		imul	eax,2
+		add		ebx,eax
+		mov		eax,[esi+ebp*8]
+		imul	eax,-1
+		add		ebx,eax
+		add		ebx,[esi+ebp*8+8]
+
+
+		;Gy
+		xor		edx, edx
+		mov		edx, esi
+		mov		eax,[esi+4]
+		imul	eax,2
+		add		edx, eax
+		mov		eax,[esi+8]
+		add		edx, eax
+		mov		eax,[esi+ebp*8]
+		imul	eax,-1
+		add		edx,eax
+		mov		eax,[esi+ebp*4+4]
+		imul	eax,-2
+		add		edx,eax
+		mov		eax,[esi+ebp*8+8]
+		imul	eax,-1
+		add		ebx,eax
+		add		edx,[esi+ebp*8+8]
+
+		test	ebx,0
+		jg		gx_positif
+		neg 	ebx
+	
+	gx_positif :
+		test	edx, 0
+		jg		gy_positif
+		neg		edx
+
+	gy_positif :
+		add ebx, edx
+		jns g_positif
+		neg ebx
+
+
+
+	g_positif:
+		cmp ebx, 000000FFh
+		
+		jle	g_negatif
+
+		mov	ebx, 255
+
+	g_negatif :
+		xor eax, eax
+		neg ebx
+		add ebx, 000000FFh
+
+		mov eax, ebx
+		shl ebx, 8
+		add ebx, eax
+		shl ebx, 8
+		add ebx, eax
+		mov [edi], ebx
+		pop ebx
+
+
+		
+
+		add esi, 4
+		add edi, 4
+		dec ecx
+		cmp cx, 0
+		jne	   boucle2
+
+
+		add esi, 8
+		add edi, 8
+		sub ecx, 00010000h
+		jnz    boucle3
+
+fin:
+		
+		pop 	ebx		
+		pop     edx
+        pop     eax
+        pop     ecx
+		pop     ebp
+       
+        ret                         ; Retour à la fonction MainWndProc
+
+process_image_asm   ENDP
+END
+
+
+\end{lstlisting}
 
 \end{document}
