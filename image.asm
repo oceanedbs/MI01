@@ -91,30 +91,31 @@ boucle: dec      ecx
         cmp    ecx, 0
         ja     boucle
 
-		;tp6
-		mov ecx,[ebp+12];hauteur
-		sub ecx,2
-		shl ecx,16
+;tp6
+	mov ecx,[ebp+12];hauteur
+	sub ecx,2
+	shl ecx,16
 
-		mov     esi,edi;img tmp1
-		mov     edi, [ebp + 24];img tmp2
-		mov     ebp, [ebp + 8] ; largeur
-		mov		eax,ebp  ;eax=largeur
-		shl		eax,2		; on multiplie la largeur par 4 ;taille  d'une ligne
-		add		edi,eax ; on ajoute au premier pixel de l'image tmp2 4*largeur
-		add		edi, 4
+	mov     esi,edi;img tmp1
+	mov     edi, [ebp + 24];img tmp2
+	mov     ebp, [ebp + 8] ; largeur
+	mov		eax,ebp  ;eax=largeur
+	shl		eax,2		; on multiplie la largeur par 4 ;taille  d'une ligne
+	add		edi,eax ; on ajoute au premier pixel de l'image tmp2 4*largeur
+	add		edi, 4
 
 
 
-	boucle3:
-		add		ecx,ebp
-        SUB     ecx,2
+boucle3:	;itération sur les lignes
+	add		ecx,ebp
+        sub     ecx,2	
 
-	boucle2:
+boucle2:	;itération sur les colones
 
 	;--------------
-		xor		ebx, ebx
-		;Gx
+
+   	;calcul de Gx avec le masque de convolution Sx (on effectue pas les multiplications par 1 pour économiser des instructions). Le résultat est stocké dans ebx, on effectue les calculs intermédiaires dans eax.
+ 
 		xor		ebx, ebx
 		mov		ebx, [esi]
 		imul	ebx,-1
@@ -131,7 +132,9 @@ boucle: dec      ecx
 		add		ebx,[esi+ebp*8+8]
 
 
-		;Gy
+	;calcul de Gy avec le masque de convolution Sy (on effectue pas les multiplications par 1 pour économiser des instructions). Le résultat est stocké dans edx, les valeurs temporaires sont dans eax.
+ 
+
 		xor		edx, edx
 		mov		edx, [esi]
 		mov		eax,[esi+4]
@@ -149,31 +152,32 @@ boucle: dec      ecx
 		imul	eax,-1
 		add		edx,eax
 
-		cmp	ebx,0
-		jg		gx_positif
-		neg		ebx
-	
+		
+  		cmp  ebx,0	; on vérifie si le résultat de Gx est négatif
+   		jg    gx_positif ; si il ne l'est pas on passe à "gx_positif"
+   		neg    ebx	;si le résultat est négatif on le passe en positif car on souhaite la valeur absolue.
+ 
 	gx_positif :
-		cmp	edx, 0
-		jg		gy_positif
-		neg		edx
+		cmp	edx, 0 	; on fait de meme pour Gy, on vérifie si il est négatif, si il l'est on le passe en positif
+		jg	gy_positif
+		neg	edx
 
 	gy_positif :
-	add ebx, edx
+		add ebx, edx ; on ajoute ensemble la valeur absolue de Gx et Gy
 
 		
 		xor eax, eax
 		mov	eax, 255
-		sub eax, ebx
-		cmp	eax, 0
+		sub eax, ebx	;pour inverser les couleurs on soustrait à 255 la valeur de chaque pixel
+  		cmp  eax, 0 ;si la valeur obtenue est inférieur à 0 on la passe à 0 car on ne peut pas avoir une valeur d'intensité négative.
 		jg		g_positif
 		xor eax,eax
-		g_positif:
-			MOV EDX, EAX
-			SHL EDX, 8
-			ADD EAX, EDX
-			SHL EDX, 8
-			ADD EAX, EDX
+	g_positif:
+		mov edx, eax
+		shl edx, eax
+		add eax, edx
+		shl edx, 8
+		add eax, edx
 		mov	[edi], eax
 	;--------------
 
@@ -182,14 +186,15 @@ boucle: dec      ecx
 		add esi, 4
 		add edi, 4
 		dec ecx
-		test ecx, 0000ffffh;
-		jne	   boucle2
+		test ecx, 0000ffffh  ;on test si on est arrivé au bout de la ligne
+		jne	   boucle2	;on revient à l'itération sur les colones
 
 
 		add esi, 8
 		add edi, 8
-		sub ecx, 00010000h
-		jnz    boucle3
+		sub ecx, 00010000h ; on passe à la ligne suivante
+ 
+		jnz    boucle3	;on revient à l'itération sur les lignes
 
 fin:
 

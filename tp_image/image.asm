@@ -159,7 +159,7 @@ boucle: dec      ecx
 		neg		edx
 
 	gy_positif :
-	add ebx, edx
+		add ebx, edx
 
 		
 		xor eax, eax
@@ -168,12 +168,12 @@ boucle: dec      ecx
 		cmp	eax, 0
 		jg		g_positif
 		xor eax,eax
-		g_positif:
-			MOV EDX, EAX
-			SHL EDX, 8
-			ADD EAX, EDX
-			SHL EDX, 8
-			ADD EAX, EDX
+	g_positif:
+		MOV EDX, EAX
+		SHL EDX, 8
+		ADD EAX, EDX
+		SHL EDX, 8
+		ADD EAX, EDX
 		mov	[edi], eax
 	;--------------
 
