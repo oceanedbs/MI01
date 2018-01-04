@@ -140,7 +140,7 @@ UINT __cdecl process_image_C(UINT biWidth, UINT biHeight,
       + ((int)img_src[c + 1] * 0x96)
       + ((int)img_src[c] * 0x1d)) >> 8);
   }
-  return 0;
+
   /* Détecteur de contours de Sobel */
   n = biWidth * 4;
 
