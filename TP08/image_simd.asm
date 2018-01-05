@@ -41,38 +41,38 @@ process_image_simd   PROC NEAR       ; Point d'entrï¿½e du sous programme
         mov     esi, [ebp + 16]
         mov     edi, [ebp + 20]
 
-		;chargement des coeff
+	;chargement des coeff
 
-		mov eax, 4C961Dh ;???
-		movd xmm2, eax
-		psllq xmm2, 32
-		movd xmm1, eax
-		paddw xmm1,xmm2
-		pxor xmm3, xmm3
-		punpcklbw  xmm1, xmm3
+	mov eax, 4C961Dh 
+	movd xmm2, eax
+	psllq xmm2, 32
+	movd xmm1, eax
+	paddw xmm1,xmm2
+	pxor xmm3, xmm3
+	punpcklbw  xmm1, xmm3
 
 
 boucle:
 
-    ;on rï¿½cupï¿½re deux pixels de l'image source ï¿½ traiter
-    movq xmm0, qword ptr[esi+ecx*4]
-		punpcklbw  xmm0, xmm3
-		pmaddwd xmm0, xmm1
-		phaddd xmm0,xmm3
+    ;on récupère deux pixels de l'image source à traiter
+   	movq xmm0, qword ptr[esi+ecx*4]
+	punpcklbw  xmm0, xmm3
+	pmaddwd xmm0, xmm1
+	phaddd xmm0,xmm3
 
-		;premier pixel
-		movd eax, xmm0 ;on r?cup?re le premier coefficient
-		shr eax, 8 ;on divise par 256
-		mov [edi+ecx*4], eax
+;premier pixel
+	movd eax, xmm0 ;on r?cup?re le premier coefficient
+	shr eax, 8 ;on divise par 256
+	mov [edi+ecx*4], eax
 
-		psrlq xmm0, 32
+	psrlq xmm0, 32
 
-		;deuxieme pixel
-		movd eax, xmm0
-		shr  eax, 8
-		mov [edi+ecx*4+4], eax
+;deuxieme pixel
+	movd eax, xmm0
+	shr  eax, 8
+	mov [edi+ecx*4+4], eax
 
-		sub ecx, 2
+	sub ecx, 2
 
         ja     boucle
 
