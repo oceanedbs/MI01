@@ -30,7 +30,7 @@
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
     breakatwhitespace=false,
-    commentstyle=\color{codegreen},   
+    commentstyle=\color{codegreen},
     breaklines=true,
     captionpos=b,
     keepspaces=true,
@@ -60,20 +60,20 @@
 
 \newpage
 
-Le but de ce TP est d'utiliser l'extension SSE pour aller plus vite lors des calculs et obtenir un programme plus condensé. 
-On commence par traiter les pixels 2 par 2 en utilisant un seul registre, puis on traitera les pixel 4 par 4 en utilisant 2 registres en parallèle.
+Le but de ce TP est d'utiliser l'extension SSE pour aller plus vite lors des calculs et obtenir un programme plus condensé.
+On commence par traiter les pixels 2 par 2, puis on traitera les pixel 4 par 4.
 
 On commence donc par charger les 2 derniers pixels de l'image dans un registre, puis à l'aide de l'instruction "unpack" on sépare chaque composante RVB par mot de 0000. Ensuite on charge les coefficients multiplicateurs dans un registre, puis on les place en double dans un registre xmm2.
-On unpack également xmm2, ainsi on se retrouve avec les coefficients multiplicateurs alignés avec chaque valeur RVB correspondante.  
+On unpack également xmm2, ainsi on se retrouve avec les coefficients multiplicateurs alignés avec chaque valeur RVB correspondante.
 
 Grâce à l'instruction pmaddd, on multiplie les coefficients avec les valeur RVB puis on les additionne 2 à 2.
 
-Afin d'avoir les 3 résultats additionés ensemble, on complète l'instruction par un phadd. On se retrouve avec 2 fois le résultat du pixel 1 et 2 fois le résultat du pixel 2 enregistré en xmm0. 
+Afin d'avoir les 3 résultats additionés ensemble, on complète l'instruction par un phadd. On se retrouve avec 2 fois le résultat du pixel 1 et 2 fois le résultat du pixel 2 enregistré en xmm0.
 
 On récupère d'abord dans eax le résultat du pixel 1, qu'on divise par 256 (car les coefficients sont à virgule fixe). Puis on place ce résultat dans le pixel de destination.
-On réalise la même opération pour le pixel 2. 
+On réalise la même opération pour le pixel 2.
 
-On réalise ces opération tant qu'il y a des pixels à traiter. 
+On réalise ces opération tant qu'il y a des pixels à traiter.
 
 
 \begin{lstlisting}
@@ -81,7 +81,7 @@ On réalise ces opération tant qu'il y a des pixels à traiter.
 ;
 ; MI01 - TP Assembleur 2 à 5
 ;
-; Réalise le traitement d'une image 32 bits.
+; R?alise le traitement d'une image 32 bits.
 
 .686
 .XMM
@@ -94,14 +94,14 @@ On réalise ces opération tant qu'il y a des pixels à traiter.
 ; **********************************************************************
 ; Sous-programme _process_image_simd
 ;
-; Réalise le traitement d'une image 32 bits avec des instructions SIMD.
+; R?alise le traitement d'une image 32 bits avec des instructions SIMD.
 ;
 ; Entrées sur la pile : Largeur de l'image (entier 32 bits)
 ;           Hauteur de l'image (entier 32 bits)
-;           Pointeur sur l'image source (dépl. 32 bits)
-;           Pointeur sur l'image tampon 1 (dépl. 32 bits)
-;           Pointeur sur l'image tampon 2 (dépl. 32 bits)
-;           Pointeur sur l'image finale (dépl. 32 bits)
+;           Pointeur sur l'image source (d?pl. 32 bits)
+;           Pointeur sur l'image tampon 1 (d?pl. 32 bits)
+;           Pointeur sur l'image tampon 2 (d?pl. 32 bits)
+;           Pointeur sur l'image finale (d?pl. 32 bits)
 ; **********************************************************************
 PUBLIC      process_image_simd
 process_image_simd   PROC NEAR       ; Point d'entrée du sous programme
@@ -115,52 +115,43 @@ process_image_simd   PROC NEAR       ; Point d'entrée du sous programme
 
         mov     ecx, [ebp + 8]
         imul    ecx, [ebp + 12]
+		sub		ecx,2
 
         mov     esi, [ebp + 16]
         mov     edi, [ebp + 20]
-		sub      ecx,2
 
-boucle: 
-        ;on récupére le pixel de l'image source à traiter 
-        movq xmm0, qword ptr[esi+ecx*4]
-		
-		
-		pxor xmm3, xmm3
-		punpcklbw xmm0, xmm3 
+	;chargement des coeff
 
-
-			; chargement des coeff
-		
-		
-		mov eax, 4C961Dh ;???
-		movd xmm2, eax
-		psllq xmm2, 1
-		movd xmm1, eax
-		paddw xmm2, smm1
-		punpcklbw xmm2, xmm3
-		;on a 2 fois les coefficients multilicateurs
-
-		pmaddwd  xmm0, xmm2
-
-		phaddd xmm0, xmm0
-		
-		movd eax, xmm0 ;on récupère le premier coefficient
-		shr eax, 8 ;on divise par 256
-
-		add ecx, 2 ;on retroune au premier pixel
-		mov [edi+ecx*4], eax
-
-		psrld xmm0, 1
-
-		movd eax, xmm0
-		shr  eax, 8
-		sub ecx, 1
-		mov [edi+ecx*4], eax
+	mov eax, 4C961Dh
+	movd xmm2, eax
+	psllq xmm2, 32
+	movd xmm1, eax
+	paddw xmm1,xmm2
+	pxor xmm3, xmm3
+	punpcklbw  xmm1, xmm3
 
 
-		sub		ecx,1
-        cmp    ecx, 0
-        ja     boucle
+boucle:
+  ;on récupère deux pixels de l'image source à traiter
+  movq xmm0, qword ptr[esi+ecx*4]
+	punpcklbw  xmm0, xmm3
+	pmaddwd xmm0, xmm1
+	phaddd xmm0,xmm3
+
+  ;premier pixel
+	movd eax, xmm0 ;on récupère le premier coefficient
+	shr eax, 8 ;on divise par 256
+	mov [edi+ecx*4], eax
+
+	psrlq xmm0, 32
+
+  ;deuxieme pixel
+	movd eax, xmm0
+	shr  eax, 8
+	mov [edi+ecx*4+4], eax
+
+	sub ecx, 2
+  ja     boucle
 
 fin:
         pop     edi
@@ -174,101 +165,174 @@ fin:
 process_image_simd   ENDP
 END
 
+
 \end{lstlisting}
 
 
 TEMPS !!!!!
 
+\newpage
+Pout adapter la boucle qui itère sur les pixels de l’image pour prendre en compte quatre pixels par itération
+au lieu de deux il suffit de soustraire 4 à ecx a la fin de chaque itération.
 
-Dans un deuxième temps, on souhaite traiter les pixels 4 par 4, pour cela on réalise les mêmes opérations mais en utilisant 2 registres xmm en même temps. 
+L'instruction movdqa xmm0, oword ptr[esi+ecx*4] permet de récupérer 128 bits en mémoire soit 4 pixels de 32 bits avec 4 composantes de 8bits.
 
+Pour faire le calcul, on peut exploiter l’instruction pmaddubsw. Il s’agit d’une multiplicationaddition
+qui considère deux vecteurs d’octets (l’un signé et l’autre non signé) et
+produit ses résultats sous forme d’un vecteur de mots signés de 16 bits. Le vecteur d'octet si il est signé ne peut comporter des valeurs uniquement entre -128 et 127.
+Dans notre cas le niveaux de gris I peut varier de 0 255 (somme des coeffs = 1).
+Si on suppose que les coefficients sont pair on peut les diviser par deux pour que la somme des coeffs = 0.5
+Ainsi le niveau de gris I d'un pixel varira entre 0 et 255*0.5 soit 127
+Il faut donc arrondir nos coefficient au nombre pair superieur si ils sont impair pui diviser par deux.
+Voici le snouveaux coefficients 264b0Eh.
+
+Construire un second vecteur d’octets qui contient les constantes associées à chaque
+composante de chaque pixel, toujours au moyen d’instructions de type « unpack »:
+\\
+\\mov eax, 264b0Eh
+-> Ici on met les coefficients dans les 32 bits de poid faible de xmm2
+\\psllq xmm2, 32
+-> On décale de 32 bits a gauche
+\\movd xmm1, eax
+-> On met les coefficients dans les 32 bits de poid faible de xmm1
+\\paddw xmm1,xmm2
+-> On additionne les vecteurs de 16 bits des registres xmm1 et xmm2 entre eux afin d'avoir les coefficients sur les 64 bits de poid faible de xmm1
+\\punpckldq xmm1,xmm1
+-> On effectue unpack pour propager les coefficients sur les 128 bits de xmm1
+
+\begin{figure}[h]
+\includegraphics[width=13cm]{Capture1.png}
+\caption{Mise en place des coefficients}
+\end{figure}
+
+
+\\Faire le calcul d’intensité à partir de ces deux vecteurs, en prenant garde aux décalages
+nécessaires de la virgule: voir le code commenté et le schema ci-dessous:
+\begin{figure}[h]
+\includegraphics[width=13cm]{Capture2.png}
+\caption{Calcul d'intensité pour 4 pixels}
+\end{figure}
+
+Stocker le résultat de ces calculs dans l’image résultante:
+movdqa [edi+ecx*4], xmm0
+On copie simplement le contenu de xmm0 en mémoire grace a cette instruction.
+
+
+\newpage
 Voici le code :
 
 \begin{lstlisting}
-        push    ebp
-        mov     ebp, esp
 
-        push    ebx
-        push    esi
-        push    edi
+; IMAGE_SIMD.ASM
+;
+; MI01 - TP Assembleur 2 à 5
+;
+; R?alise le traitement d'une image 32 bits.
 
-        mov     ecx, [ebp + 8]
-        imul    ecx, [ebp + 12]
+.686
+.XMM
+.MODEL FLAT, C
 
-        mov     esi, [ebp + 16]
-        mov     edi, [ebp + 20]
-		sub      ecx,2
+.DATA
 
-boucle: 
-        ;on récupére le pixel de l'image source à traiter 
-        movq xmm0, qword ptr[esi+ecx*4]
-	sub ecx, 2
-	movq xmm1, qword ptr[esi+ecx*4]
-		
-		
-	pxor xmm3, xmm3
-	punpcklbw xmm0, xmm3 
-	punpcklbw xmm1, xmm3 
+.CODE
 
+; **********************************************************************
+; Sous-programme _process_image_simd
+;
+; R?alise le traitement d'une image 32 bits avec des instructions SIMD.
+;
+; Entrées sur la pile : Largeur de l'image (entier 32 bits)
+;           Hauteur de l'image (entier 32 bits)
+;           Pointeur sur l'image source (d?pl. 32 bits)
+;           Pointeur sur l'image tampon 1 (d?pl. 32 bits)
+;           Pointeur sur l'image tampon 2 (d?pl. 32 bits)
+;           Pointeur sur l'image finale (d?pl. 32 bits)
+; **********************************************************************
+PUBLIC      process_image_simd
+process_image_simd   PROC NEAR       ; Point d'entrée du sous programme
 
-	; chargement des coeff
-		
-	mov eax, 4C961Dh ;???
-	movd xmm2, eax
-	psllq xmm2, 1
-	movd xmm1, eax
-	paddw xmm2, smm1
-	punpcklbw xmm2, xmm3
-	;on a 2 fois les coefficients multilicateurs
+  push    ebp
+  mov     ebp, esp
 
-	pmaddwd  xmm0, xmm2
-	pmaddwd  xmm1, xmm2
+  push    ebx
+  push    esi
+  push    edi
 
-	phaddd xmm0, xmm0
-	phaddd xmm1, xmm1
-		
-	movd eax, xmm0 ;on récupère le premier coefficient
-	shr eax, 8 ;on divise par 256
+  mov     ecx, [ebp + 8]
+  imul    ecx, [ebp + 12]
 
-	add ecx, 4 ;on retroune au premier pixel
-	mov [edi+ecx*4], eax
+  mov     esi, [ebp + 16]
+  mov     edi, [ebp + 20]
+  sub      ecx,4
 
-	psrld xmm0, 1
+  ;mise en place des coeffs
+  mov eax, 264b0Eh
+  movd xmm2, eax
+  psllq xmm2, 32
+  movd xmm1, eax
+  paddw xmm1,xmm2
+  punpckldq xmm1,xmm1
 
-	movd eax, xmm0
-	shr  eax, 8
-	sub ecx, 1
-	mov [edi+ecx*4], eax
+boucle:
 
-	movd eax, xmm1 ;on récupère le premier coefficient
-	shr eax, 8 ;on divise par 256
+  ;on récupére les 4 pixel de l'image source à traiter
+  movdqa xmm0, oword ptr[esi+ecx*4]
+  ;on fait le calcul avec les coefficients de xmm1
+  pmaddubsw xmm0,xmm1
+  ;on ajoute la somme des deux premire composante de chaque pixels a la 3eme
+  phaddw xmm0, xmm3
+  ;on divise par 128 car les coeffs ont été divisé par 2
+  psrlw xmm0,7
+  ;on met le resultat du calcul dans la composante bleu
+  punpcklwd xmm0,xmm3
+  movdqa [edi+ecx*4], xmm0
 
-	sub ecx, 1
-	mov [edi+ecx*4], eax
-
-	psrld xmm1, 1
-
-	movd eax, xmm1
-	shr  eax, 8
-	sub ecx, 1
-	mov [edi+ecx*4], eax
-
-	sub	ecx,4
-        cmp    ecx, 0
-        ja     boucle
+sub	ecx,4
+ja     boucle
 
 fin:
-        pop     edi
-        pop     esi
-        pop     ebx
+pop     edi
+pop     esi
+pop     ebx
 
-        pop     ebp
+pop     ebp
 
-        ret       
+ret
+
+process_image_simd   ENDP
+END
+
 \end{lstlisting}
 
+\newpage
+Test de performance:
 
+\begin{figure}[h]
+\includegraphics[width=13cm]{CaptureC.png}
+\caption{Temps d'éxecution avec l'algorithme C}
+\end{figure}
 
+\begin{figure}[h]
+\includegraphics[width=13cm]{CaptureASM.png}
+\caption{Temps d'éxecution avec l'algorithme ASM}
+\end{figure}
+
+\begin{figure}[h]
+\includegraphics[width=13cm]{CaptureSimd2.png}
+\caption{Temps d'éxecution avec l'algorithme SIMD avec 2 pixels}
+\end{figure}
+
+\begin{figure}[h]
+\includegraphics[width=13cm]{CaptureSimd4.png}
+\caption{Temps d'éxecution avec l'algorithme SIMD avec 4 pixels}
+\end{figure}
+
+\\Le temps d'excution moyen par itération en C et de 1.2ms
+\\En assembleur on divise par 1.7 ce temps avec 0.7ms de moyenne.
+\\En SIMD avec un traitement de deux pixels on divise le temps par 3 par rapport au c avec 0.4ms de moyenne
+\\Enfin en SIMD avec un traitement de quatre pixels on divise le temps par 8 par rapport au c avec 0.15ms de moyenne
+Les gains de temps sont donc significatif à chaque fois. Grace au jeux d'instruction SIMD on peut optimiser avec un facteur de 8 un algorithme C
 
 
 \end{document}
