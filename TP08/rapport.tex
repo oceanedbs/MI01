@@ -63,17 +63,68 @@
 Le but de ce TP est d'utiliser l'extension SSE pour aller plus vite lors des calculs et obtenir un programme plus condensé.
 On commence par traiter les pixels 2 par 2, puis on traitera les pixel 4 par 4.
 
-On commence donc par charger les 2 derniers pixels de l'image dans un registre, puis à l'aide de l'instruction "unpack" on sépare chaque composante RVB par mot de 0000. Ensuite on charge les coefficients multiplicateurs dans un registre, puis on les place en double dans un registre xmm2.
-On unpack également xmm2, ainsi on se retrouve avec les coefficients multiplicateurs alignés avec chaque valeur RVB correspondante.
+\section{Pixels 2 par 2}
+
+On commence tout d'abord par charger les coefficient multiplicateurs dans un registre (ici eax), puis on charge ces coefficients dans le registre xmm2, on décale le tout vers la gauche et on charge une nouvelle fois les coefficients afin d'avoir 2 fois les coefficients dans la partie basse du registre.
+
+
+Puis à l'aide de l'instruction unpack, on sépare chaque coefficient d'un mot "0000" pour pouvoir par la suite aligner les coefficients avec les valeurs des pixels. 
+
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.2]{charge_coeff.png}
+\caption{Chargement des coefficients dans le registre xmm2}
+
+\end{figure}
+
+
+
+
+Ensuite on réalise exactement les même opérations sur les pixels. On charge d'un coup 2 pixels dans un registre SSE puis on utilise l'instruction unpack, avec un registre mis à 0 pour aligner les composantes RVB avec les coefficients. 
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.2]{chargement_pixel.png}
+\caption{Chargement des 2 pixels et alignement}
+\label{}
+\end{figure}
+
+\newpage
+
 
 Grâce à l'instruction pmaddd, on multiplie les coefficients avec les valeur RVB puis on les additionne 2 à 2.
 
-Afin d'avoir les 3 résultats additionés ensemble, on complète l'instruction par un phadd. On se retrouve avec 2 fois le résultat du pixel 1 et 2 fois le résultat du pixel 2 enregistré en xmm0.
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.20]{pmadd.png}
+\caption{Multiplication et ajout des coefficient 2 à 2}
+\label{}
+\end{figure}
 
-On récupère d'abord dans eax le résultat du pixel 1, qu'on divise par 256 (car les coefficients sont à virgule fixe). Puis on place ce résultat dans le pixel de destination.
+Afin d'avoir les 3 résultats additionés ensemble, on complète l'instruction par un phadd. 
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.20]{phadd.png}
+\caption{Ajout des coefficient 2 à 2 entre eux}
+\label{}
+\end{figure}
+
+On récupère d'abord dans eax le résultat du pixel 1, qu'on divise par 256 (car les coefficients sont à virgule fixe). Puis on place ce résultat dans la composante bleue du pixel de destination.
 On réalise la même opération pour le pixel 2.
 
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.2]{extraction.png}
+\caption{Extraction de I1 et I2}
+\label{}
+\end{figure}
+
+
+
 On réalise ces opération tant qu'il y a des pixels à traiter.
+
+\newpage
+
+Voici le code que nous avons implémenté : 
 
 
 \begin{lstlisting}
@@ -91,7 +142,12 @@ On réalise ces opération tant qu'il y a des pixels à traiter.
 
 .CODE
 
-; **********************************************************************
+;\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.20]{extraction.png}
+\caption{Extraction de I1 et I2}
+\label{}
+\end{figure} ************************************************************ 
 ; Sous-programme _process_image_simd
 ;
 ; R?alise le traitement d'une image 32 bits avec des instructions SIMD.
@@ -102,7 +158,7 @@ On réalise ces opération tant qu'il y a des pixels à traiter.
 ;           Pointeur sur l'image tampon 1 (d?pl. 32 bits)
 ;           Pointeur sur l'image tampon 2 (d?pl. 32 bits)
 ;           Pointeur sur l'image finale (d?pl. 32 bits)
-; **********************************************************************
+; ************************************************************
 PUBLIC      process_image_simd
 process_image_simd   PROC NEAR       ; Point d'entrée du sous programme
 
@@ -120,7 +176,7 @@ process_image_simd   PROC NEAR       ; Point d'entrée du sous programme
         mov     esi, [ebp + 16]
         mov     edi, [ebp + 20]
 
-	;chargement des coeff
+;chargement des coeff
 
 	mov eax, 4C961Dh
 	movd xmm2, eax
@@ -169,23 +225,24 @@ END
 \end{lstlisting}
 
 
-TEMPS !!!!!
+\section{Pixels 4 par 4}
 
-\newpage
-Pout adapter la boucle qui itère sur les pixels de l’image pour prendre en compte quatre pixels par itération
-au lieu de deux il suffit de soustraire 4 à ecx a la fin de chaque itération.
+Nous cherchons maintenant à optimiser encore plus le code obtenu précédement en traitant 4 pixels à la fois. 
+
+Pout adapter la boucle qui itère sur les pixels de l’image pour prendre en compte quatre pixels par itération au lieu de deux il suffit de soustraire 4 à ecx a la fin de chaque itération.
 
 L'instruction movdqa xmm0, oword ptr[esi+ecx*4] permet de récupérer 128 bits en mémoire soit 4 pixels de 32 bits avec 4 composantes de 8bits.
 
-Pour faire le calcul, on peut exploiter l’instruction pmaddubsw. Il s’agit d’une multiplicationaddition
+Pour faire le calcul, on peut exploiter l’instruction pmaddubsw. Il s’agit d’une multiplication-addition
 qui considère deux vecteurs d’octets (l’un signé et l’autre non signé) et
 produit ses résultats sous forme d’un vecteur de mots signés de 16 bits. Le vecteur d'octet si il est signé ne peut comporter des valeurs uniquement entre -128 et 127.
-Dans notre cas le niveaux de gris I peut varier de 0 255 (somme des coeffs = 1).
-Si on suppose que les coefficients sont pair on peut les diviser par deux pour que la somme des coeffs = 0.5
+Dans notre cas le niveaux de gris I peut varier de 0 255 (cela est vérifié car la somme des coefficients multiplicateurs est égale à 1).
+Si on suppose que les coefficients sont pairs on peut les diviser par deux pour que la somme des coeffss soit égale à 0.5.
 Ainsi le niveau de gris I d'un pixel varira entre 0 et 255*0.5 soit 127
-Il faut donc arrondir nos coefficient au nombre pair superieur si ils sont impair pui diviser par deux.
-Voici le snouveaux coefficients 264b0Eh.
+Il faut donc arrondir nos coefficient au nombre pair superieur si ils sont impair puis diviser par deux.
+On obtient donc les coefficients suivants : 26 4b 0E h.
 
+Comme précédement on utilise les instruction de type 'unpack' pour aligner les coefficients multiplicateurs
 Construire un second vecteur d’octets qui contient les constantes associées à chaque
 composante de chaque pixel, toujours au moyen d’instructions de type « unpack »:
 \\
@@ -199,19 +256,22 @@ composante de chaque pixel, toujours au moyen d’instructions de type « unpack
 -> On additionne les vecteurs de 16 bits des registres xmm1 et xmm2 entre eux afin d'avoir les coefficients sur les 64 bits de poid faible de xmm1
 \\punpckldq xmm1,xmm1
 -> On effectue unpack pour propager les coefficients sur les 128 bits de xmm1
+\newpage
 
 \begin{figure}[h]
-\includegraphics[width=13cm]{Capture1.png}
+\includegraphics[width=13cm]{Capture1.PNG}
 \caption{Mise en place des coefficients}
 \end{figure}
 
 
-\\Faire le calcul d’intensité à partir de ces deux vecteurs, en prenant garde aux décalages
+Faire le calcul d’intensité à partir de ces deux vecteurs, en prenant garde aux décalages
 nécessaires de la virgule: voir le code commenté et le schema ci-dessous:
 \begin{figure}[h]
-\includegraphics[width=13cm]{Capture2.png}
+\includegraphics[width=13cm]{Capture2.PNG}
 \caption{Calcul d'intensité pour 4 pixels}
 \end{figure}
+
+\medskip 
 
 Stocker le résultat de ces calculs dans l’image résultante:
 movdqa [edi+ecx*4], xmm0
@@ -237,7 +297,7 @@ Voici le code :
 
 .CODE
 
-; **********************************************************************
+; *********************************************************
 ; Sous-programme _process_image_simd
 ;
 ; R?alise le traitement d'une image 32 bits avec des instructions SIMD.
@@ -248,7 +308,7 @@ Voici le code :
 ;           Pointeur sur l'image tampon 1 (d?pl. 32 bits)
 ;           Pointeur sur l'image tampon 2 (d?pl. 32 bits)
 ;           Pointeur sur l'image finale (d?pl. 32 bits)
-; **********************************************************************
+; ******************************************************
 PUBLIC      process_image_simd
 process_image_simd   PROC NEAR       ; Point d'entrée du sous programme
 
@@ -306,32 +366,32 @@ END
 \end{lstlisting}
 
 \newpage
-Test de performance:
+\section{Comparaison de la performance des 2 algorithmes implémentés}
 
 \begin{figure}[h]
-\includegraphics[width=13cm]{CaptureC.png}
+\includegraphics[width=11cm]{CaptureC.PNG}
 \caption{Temps d'éxecution avec l'algorithme C}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=13cm]{CaptureASM.png}
+\includegraphics[width=11cm]{CaptureASM.PNG}
 \caption{Temps d'éxecution avec l'algorithme ASM}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=13cm]{CaptureSimd2.png}
+\includegraphics[width=11cm]{CaptureSimd2.PNG}
 \caption{Temps d'éxecution avec l'algorithme SIMD avec 2 pixels}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=13cm]{CaptureSimd4.png}
+\includegraphics[width=11cm]{CaptureSimd4.PNG}
 \caption{Temps d'éxecution avec l'algorithme SIMD avec 4 pixels}
 \end{figure}
 
-\\Le temps d'excution moyen par itération en C et de 1.2ms
-\\En assembleur on divise par 1.7 ce temps avec 0.7ms de moyenne.
-\\En SIMD avec un traitement de deux pixels on divise le temps par 3 par rapport au c avec 0.4ms de moyenne
-\\Enfin en SIMD avec un traitement de quatre pixels on divise le temps par 8 par rapport au c avec 0.15ms de moyenne
+Le temps d'excution moyen par itération en C et de 1.2ms
+En assembleur on divise par 1.7 ce temps avec 0.7ms de moyenne.
+En SIMD avec un traitement de deux pixels on divise le temps par 3 par rapport au c avec 0.4ms de moyenne
+Enfin en SIMD avec un traitement de quatre pixels on divise le temps par 8 par rapport au c avec 0.15ms de moyenne
 Les gains de temps sont donc significatif à chaque fois. Grace au jeux d'instruction SIMD on peut optimiser avec un facteur de 8 un algorithme C
 
 
