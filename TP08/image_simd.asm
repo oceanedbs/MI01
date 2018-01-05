@@ -1,6 +1,6 @@
 ; IMAGE_SIMD.ASM
 ;
-; MI01 - TP Assembleur 2 � 5
+; MI01 - TP Assembleur 2 à 5
 ;
 ; R?alise le traitement d'une image 32 bits.
 
@@ -17,7 +17,7 @@
 ;
 ; R?alise le traitement d'une image 32 bits avec des instructions SIMD.
 ;
-; Entr�es sur la pile : Largeur de l'image (entier 32 bits)
+; Entrées sur la pile : Largeur de l'image (entier 32 bits)
 ;           Hauteur de l'image (entier 32 bits)
 ;           Pointeur sur l'image source (d?pl. 32 bits)
 ;           Pointeur sur l'image tampon 1 (d?pl. 32 bits)
@@ -25,7 +25,7 @@
 ;           Pointeur sur l'image finale (d?pl. 32 bits)
 ; **********************************************************************
 PUBLIC      process_image_simd
-process_image_simd   PROC NEAR       ; Point d'entr�e du sous programme
+process_image_simd   PROC NEAR       ; Point d'entrée du sous programme
 
         push    ebp
         mov     ebp, esp
@@ -43,7 +43,7 @@ process_image_simd   PROC NEAR       ; Point d'entr�e du sous programme
 
 	;chargement des coeff
 
-	mov eax, 4C961Dh 
+	mov eax, 4C961Dh
 	movd xmm2, eax
 	psllq xmm2, 32
 	movd xmm1, eax
@@ -54,14 +54,14 @@ process_image_simd   PROC NEAR       ; Point d'entr�e du sous programme
 
 boucle:
 
-    ;on r�cup�re deux pixels de l'image source � traiter
+    ;on récupère deux pixels de l'image source à traiter
    	movq xmm0, qword ptr[esi+ecx*4]
 	punpcklbw  xmm0, xmm3
 	pmaddwd xmm0, xmm1
 	phaddd xmm0,xmm3
 
 ;premier pixel
-	movd eax, xmm0 ;on r?cup?re le premier coefficient
+	movd eax, xmm0 ;on récupère le premier coefficient
 	shr eax, 8 ;on divise par 256
 	mov [edi+ecx*4], eax
 
@@ -83,7 +83,7 @@ fin:
 
         pop     ebp
 
-        ret                         ; Retour ? la fonction MainWndProc
+        ret                         ; Retour à la fonction MainWndProc
 
 process_image_simd   ENDP
 END
