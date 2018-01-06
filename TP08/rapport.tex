@@ -64,11 +64,14 @@ Le but de ce TP est d'utiliser l'extension SSE pour aller plus vite lors des cal
 On commence par traiter les pixels 2 par 2, puis on traitera les pixel 4 par 4.
 
 \section{Pixels 2 par 2}
+\subsection{Principe de fonctionement de l'algorithme}
 
-On commence tout d'abord par charger les coefficient multiplicateurs dans un registre (ici eax), puis on charge ces coefficients dans le registre xmm2, on décale le tout vers la gauche et on charge une nouvelle fois les coefficients afin d'avoir 2 fois les coefficients dans la partie basse du registre.
+Pour adapter la boucle, afin de traiter toute l'image en traitant 2 pixels à la fois, on à simplement soustrait 2 à ecx à la fin de chaque itération. 
+
+Ensuite, pour le traitement des pixels, on commence tout d'abord par charger les coefficient multiplicateurs dans un registre (ici eax), puis on charge ces coefficients dans le registre xmm2, on décale le tout vers la gauche et on charge une nouvelle fois les coefficients afin d'avoir 2 fois les coefficients dans la partie basse du registre.
 
 
-Puis à l'aide de l'instruction unpack, on sépare chaque coefficient d'un mot "0000" pour pouvoir par la suite aligner les coefficients avec les valeurs des pixels. 
+Puis à l'aide de l'instruction unpack, on sépare chaque coefficient d'un octet "0000 0000" pour pouvoir par la suite aligner les coefficients avec les valeurs des pixels. 
 
 \begin{figure}[htp]
 \centering
@@ -100,7 +103,7 @@ Grâce à l'instruction pmaddd, on multiplie les coefficients avec les valeur RV
 \label{}
 \end{figure}
 
-Afin d'avoir les 3 résultats additionés ensemble, on complète l'instruction par un phadd. 
+Afin d'avoir les 3 résultats additionés ensemble, on complète l'instruction par un phadd entre xmm0 et xmm3 qui est un registre mis à zéro. 
 \begin{figure}[htp]
 \centering
 \includegraphics[scale=0.20]{phadd.png}
@@ -108,8 +111,8 @@ Afin d'avoir les 3 résultats additionés ensemble, on complète l'instruction p
 \label{}
 \end{figure}
 
-On récupère d'abord dans eax le résultat du pixel 1, qu'on divise par 256 (car les coefficients sont à virgule fixe). Puis on place ce résultat dans la composante bleue du pixel de destination.
-On réalise la même opération pour le pixel 2.
+On récupère d'abord dans eax le résultat du pixel 1, qu'on divise par 256 (car les coefficients sont à virgule fixe et que jusqu'a présent on les a traité comme des entiers). Puis on place ce résultat dans la composante bleue du pixel de destination.
+
 
 \begin{figure}[htp]
 \centering
@@ -119,10 +122,11 @@ On réalise la même opération pour le pixel 2.
 \end{figure}
 
 
-
+On réalise la même opération pour le deuxième  pixel.
 On réalise ces opération tant qu'il y a des pixels à traiter.
 
-\newpage
+
+\subsection{Code ASM pour traiter les pixels 2 par 2}
 
 Voici le code que nous avons implémenté : 
 
@@ -229,7 +233,9 @@ END
 
 Nous cherchons maintenant à optimiser encore plus le code obtenu précédement en traitant 4 pixels à la fois. 
 
-Pout adapter la boucle qui itère sur les pixels de l’image pour prendre en compte quatre pixels par itération au lieu de deux il suffit de soustraire 4 à ecx a la fin de chaque itération.
+\subsection{Principe de fonctionement de l'algorithme}
+
+Pout adapter la boucle qui itère sur les pixels de l’image pour prendre en compte quatre pixels par itération au lieu de deux il suffit de soustraire 4 à ecx a la fin de chaque itération (au lieu de 2 précédement).
 
 L'instruction movdqa xmm0, oword ptr[esi+ecx*4] permet de récupérer 128 bits en mémoire soit 4 pixels de 32 bits avec 4 composantes de 8bits.
 
@@ -244,28 +250,25 @@ On obtient donc les coefficients suivants : 26 4b 0E h.
 
 Comme précédement on utilise les instruction de type 'unpack' pour aligner les coefficients multiplicateurs
 Construire un second vecteur d’octets qui contient les constantes associées à chaque
-composante de chaque pixel, toujours au moyen d’instructions de type « unpack »:
-\\
-\\mov eax, 264b0Eh
--> Ici on met les coefficients dans les 32 bits de poid faible de xmm2
-\\psllq xmm2, 32
--> On décale de 32 bits a gauche
-\\movd xmm1, eax
--> On met les coefficients dans les 32 bits de poid faible de xmm1
-\\paddw xmm1,xmm2
--> On additionne les vecteurs de 16 bits des registres xmm1 et xmm2 entre eux afin d'avoir les coefficients sur les 64 bits de poid faible de xmm1
-\\punpckldq xmm1,xmm1
--> On effectue unpack pour propager les coefficients sur les 128 bits de xmm1
-\newpage
+composante de chaque pixel, toujours au moyen d’instructions de type « unpack » :
+\begin{itemize}
+\item A l'aide de l'instruction 'mov eax, 264b0Eh',  on met les coefficients dans les 32 bits de poid faible de xmm2
+\item avec 'psllq xmm2, 32', on décale de 32 bits à gauche, pour pouvoir ensuite placer une deuxième fois les coefficients
+\item avec 'movd xmm1, eax', on met les coefficients dans les 32 bits de poids faible de xmm1
+\item 'paddw xmm1,xmm2' permet d'additionner les vecteurs de 16 bits des registres xmm1 et xmm2 entre eux afin d'avoir les coefficients sur les 64 bits de poid faible de xmm1
+\item pour finir 'punpckldq xmm1,xmm1' effectue un unpack pour propager les coefficients sur les 128 bits de xmm1
+
+\end{itemize}
+
 
 \begin{figure}[h]
 \includegraphics[width=13cm]{Capture1.PNG}
 \caption{Mise en place des coefficients}
 \end{figure}
 
+Puis comme dis précédement, comme on a déjà les 4 pixels chargés dans xmm0, on peut calculer I pour chauque pixel. On prend toujours garde aux décalage à la virgule.
 
-Faire le calcul d’intensité à partir de ces deux vecteurs, en prenant garde aux décalages
-nécessaires de la virgule: voir le code commenté et le schema ci-dessous:
+
 \begin{figure}[h]
 \includegraphics[width=13cm]{Capture2.PNG}
 \caption{Calcul d'intensité pour 4 pixels}
@@ -273,12 +276,13 @@ nécessaires de la virgule: voir le code commenté et le schema ci-dessous:
 
 \medskip 
 
-Stocker le résultat de ces calculs dans l’image résultante:
-movdqa [edi+ecx*4], xmm0
-On copie simplement le contenu de xmm0 en mémoire grace a cette instruction.
+Pour finir, pour stocker les résultats on utilise l'instruction : 'movdqa [edi+ecx*4], xmm0', qui nous permet de copier simplement le contenu de xmm0 en mémoire grace a cette instruction (sachant que les coefficients I1, I2, I3 et I4 sont déjà correctement placés pour être dans le composante bleue de l'image. 
 
 
 \newpage
+
+\subsection{Code ASM pour traiter les pixels 4 par 4}
+
 Voici le code :
 
 \begin{lstlisting}
